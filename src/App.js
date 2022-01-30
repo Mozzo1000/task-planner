@@ -3,6 +3,7 @@ import Box from '@mui/material/Box';
 import Navbar from './components/Navbar';
 import Overview from './pages/Overview';
 import Lists from './pages/Lists';
+import Tasks from './pages/Tasks';
 
 function App() {
   return (
@@ -13,6 +14,7 @@ function App() {
           <Routes>
             <Route index path="/" element={<Overview />} />
             <Route path="/lists/:id" element={<Lists />} />
+            <Route path="/tasks/:id" element={<Tasks />} />
           </Routes>
         </Box>
       </Router>

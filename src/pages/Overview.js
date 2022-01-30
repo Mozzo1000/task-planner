@@ -11,6 +11,7 @@ import Checkbox from '@mui/material/Checkbox';
 import { ListItemButton, ListItemText } from '@mui/material';
 import Greeting from '../components/Greeting';
 import AddTask from '../components/AddTask';
+import { Link } from "react-router-dom";
 
 function Overview() {
   return (
@@ -23,7 +24,7 @@ function Overview() {
                 <Card>
                     <List>
                         <ListItem disablePadding>
-                            <ListItemButton dense>
+                            <ListItemButton dense component={Link} to="/tasks/1" >
                                 <ListItemIcon>
                                     <Checkbox edge="start" disableRipple />
                                 </ListItemIcon>
