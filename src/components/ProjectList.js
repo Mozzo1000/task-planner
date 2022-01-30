@@ -6,6 +6,7 @@ import ListItemText from '@mui/material/ListItemText';
 import Collapse from '@mui/material/Collapse';
 import ExpandLess from '@mui/icons-material/ExpandLess';
 import ExpandMore from '@mui/icons-material/ExpandMore';
+import { Link } from "react-router-dom";
 
 function ProjectList() {
     const [open, setOpen] = React.useState(true);
@@ -22,10 +23,10 @@ function ProjectList() {
             </ListItemButton>
             <Collapse in={open} timeout="auto" unmountOnExit>
                 <List disablePadding>
-                    <ListItemButton sx={{ pl: 4 }}>
+                    <ListItemButton sx={{ pl: 4 }} component={Link} to="/lists/1">
                         <ListItemText primary="List 1" />
                     </ListItemButton>
-                    <ListItemButton sx={{ pl: 4 }}>
+                    <ListItemButton sx={{ pl: 4 }} component={Link} to="/lists/2">
                         <ListItemText primary="List 2" />
                     </ListItemButton>
                 </List>
