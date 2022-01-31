@@ -8,11 +8,14 @@ import FormatAlignLeftIcon from '@mui/icons-material/FormatAlignLeft';
 import Link from '@mui/material/Link';
 import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
+import AccessTimeIcon from '@mui/icons-material/AccessTime';
+import DatePicker from '@mui/lab/DatePicker';
 
 function Tasks() {
     let { id } = useParams()
     const [content, setContent] = useState({});
     const [openEditDesc, setOpenEditDesc] = useState(false);
+    const [value, setValue] = React.useState("2022-01-31");
 
     const handleOpenEditDesc = () => {
         setOpenEditDesc(!openEditDesc);
@@ -20,13 +23,27 @@ function Tasks() {
 
     return (
         <Container>
-            <Grid container spacing={3} direction="row" justifyContent="flex-start" alignItems="flex-start">
+            <Grid container spacing={3} direction="row" justifyContent="flex-start" alignItems="center">
                 <Grid item xs={12}>
                     <h1>Test task</h1>
+                </Grid>
+                <Grid item xs={2}>
                     <Breadcrumbs>
                         <Typography variant="subtitle1">List 1</Typography>
                         <Typography variant="subtitle1">Test task</Typography>
                     </Breadcrumbs>
+                </Grid>
+                <Grid item xs={2}>
+                    <DatePicker
+                        value={value}
+                        clearable
+                        
+                        InputProps={{ startAdornment: <AccessTimeIcon/>, disableUnderline: true }}
+                        onChange={(newValue) => {
+                        setValue(newValue);
+                        }}
+                        renderInput={(params) => <TextField variant="standard" {...params}>{value}</TextField>}
+                    />
                 </Grid>
                 <Grid item xs={12}>
                     <Typography variant="h5">{<FormatAlignLeftIcon />} Description</Typography>
