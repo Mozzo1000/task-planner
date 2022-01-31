@@ -20,7 +20,7 @@ function Tasks() {
 
     return (
         <Container>
-            <Grid container spacing={3} direction="column" justifyContent="flex-start" alignItems="flex-start">
+            <Grid container spacing={3} direction="row" justifyContent="flex-start" alignItems="flex-start">
                 <Grid item xs={12}>
                     <h1>Test task</h1>
                     <Breadcrumbs>
@@ -37,7 +37,7 @@ function Tasks() {
                     )}
                     {openEditDesc && 
                         <>
-                            <TextField multiline={true}></TextField>
+                            <TextField multiline={true} fullWidth></TextField>
                             <Button onClick={handleOpenEditDesc}>Close</Button>
                         </>
                     }
