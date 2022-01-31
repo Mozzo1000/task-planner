@@ -4,6 +4,7 @@ import Navbar from './components/Navbar';
 import Overview from './pages/Overview';
 import Lists from './pages/Lists';
 import Tasks from './pages/Tasks';
+import Projects from './pages/Projects';
 
 function App() {
   return (
@@ -15,6 +16,7 @@ function App() {
             <Route index path="/" element={<Overview />} />
             <Route path="/lists/:id" element={<Lists />} />
             <Route path="/tasks/:id" element={<Tasks />} />
+            <Route path="/projects" element={<Projects />} />
           </Routes>
         </Box>
       </Router>
