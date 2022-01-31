@@ -5,6 +5,7 @@ import Overview from './pages/Overview';
 import Lists from './pages/Lists';
 import Tasks from './pages/Tasks';
 import Projects from './pages/Projects';
+import Planner from './pages/Planner';
 
 function App() {
   return (
@@ -17,6 +18,7 @@ function App() {
             <Route path="/lists/:id" element={<Lists />} />
             <Route path="/tasks/:id" element={<Tasks />} />
             <Route path="/projects" element={<Projects />} />
+            <Route path="/planner" element={<Planner />} />
           </Routes>
         </Box>
       </Router>
