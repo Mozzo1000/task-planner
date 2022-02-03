@@ -1,0 +1,14 @@
+# docker-compose.yml
+version: '3.8'
+services:
+    db-task-planner:
+        image: "postgres" # use latest official postgres version
+        ports:
+            - 5432:5432  
+        restart: always
+        env_file:
+            - .env
+        volumes:
+            - task-planner:/var/lib/postgresql/db-data/tasks/ # persist data even if container shuts down
+volumes:
+    task-planner:
