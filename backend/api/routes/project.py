@@ -1,9 +1,17 @@
 from flask import Blueprint, request, jsonify
-from models import Project, ProjectSchema, db, User
+from models import Project, ProjectSchema, ProjectListSchema,  db, User
 from flask_jwt_extended import (jwt_required, get_jwt_identity)
 
 
 project_endpoint = Blueprint('project', __name__)
+
+@project_endpoint.route("/v1/projects/lists/<id>")
+@jwt_required()
+def get_project_lists(id):
+    project_list_schema = ProjectListSchema(many=False)
+    project = Project.query.filter_by(owner_id=User.find_by_email(get_jwt_identity()).id, id=id).first()
+    return jsonify(project_list_schema.dump(project))
+
 
 @project_endpoint.route("/v1/projects/<id>")
 @jwt_required()
