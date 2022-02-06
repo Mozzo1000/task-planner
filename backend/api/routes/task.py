@@ -1,5 +1,5 @@
 from flask import Blueprint, request, jsonify
-from models import Task, TaskSchema, db
+from models import Task, TaskSchema, db, User
 from flask_jwt_extended import (jwt_required, get_jwt_identity)
 
 task_endpoint = Blueprint('task', __name__)
@@ -8,14 +8,14 @@ task_endpoint = Blueprint('task', __name__)
 @jwt_required()
 def get_all_tasks():
     task_schema = TaskSchema(many=True)
-    tasks = Task.query.filter_by(email=get_jwt_identity()).all()
+    tasks = Task.query.filter_by(owner_id=User.find_by_email(get_jwt_identity()).id).all()
     return jsonify(task_schema.dump(tasks))
 
 @task_endpoint.route("/v1/tasks/<id>")
 @jwt_required()
 def get_task(id):
     task_schema = TaskSchema(many=False)
-    task = Task.query.filter_by(email=get_jwt_identity(), id=id).first()
+    task = Task.query.filter_by(owner_id=User.find_by_email(get_jwt_identity()).id, id=id).first()
     return jsonify(task_schema.dump(task))
 
 @task_endpoint.route("/v1/tasks", methods=["POST"])
@@ -50,7 +50,7 @@ def add_task():
 @task_endpoint.route('/v1/tasks/<id>', methods=["DELETE"])
 @jwt_required()
 def remove_task(id):
-    task = Task.query.filter_by(email=get_jwt_identity(), id=id).first()
+    task = Task.query.filter_by(owner_id=User.find_by_email(get_jwt_identity()).id, id=id).first()
     try: 
         db.session.delete(task)
         db.session.commit()

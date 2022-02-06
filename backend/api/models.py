@@ -5,63 +5,6 @@ from werkzeug.security import generate_password_hash, check_password_hash
 db = SQLAlchemy()
 ma = Marshmallow()
 
-class Project(db.Model):
-    __tablename__ = 'projects'
-    id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String, nullable=False)
-    created_at = db.Column(db.DateTime, server_default=db.func.now())
-
-    lists = db.relationship("List", uselist=True, backref="projects")
-
-    def save_to_db(self):
-        db.session.add(self)
-        db.session.commit()
-
-class List(db.Model):
-    __tablename__ = 'lists'
-    id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String, nullable=False)
-    created_at = db.Column(db.DateTime, server_default=db.func.now())
-
-    project_id = db.Column(db.Integer, db.ForeignKey('projects.id'))
-    tasks = db.relationship("Task", uselist=True, backref="lists")
-
-    def save_to_db(self):
-        db.session.add(self)
-        db.session.commit()
-
-class Task(db.Model):
-    __tablename__ = 'tasks'
-    id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String, nullable=False)
-    description = db.Column(db.String, nullable=True)
-    due_date = db.Column(db.Date, nullable=True)
-    status = db.Column(db.String, nullable=False, default="New")
-    created_at = db.Column(db.DateTime, server_default=db.func.now())
-
-    list_id = db.Column(db.Integer, db.ForeignKey('lists.id'))
-
-    def save_to_db(self):
-        db.session.add(self)
-        db.session.commit()
-
-class TaskSchema(ma.SQLAlchemyAutoSchema):
-    class Meta:
-        model = Task
-
-
-
-
-class ListSchema(ma.SQLAlchemyAutoSchema):
-    class Meta:
-        model = List
-
-
-
-class ProjectSchema(ma.SQLAlchemyAutoSchema):
-    class Meta:
-        model = Project
-
 class User(db.Model):
     __tablename__ = 'users'
     id = db.Column(db.Integer, primary_key=True)
@@ -91,6 +34,66 @@ class UserSchema(ma.SQLAlchemyAutoSchema):
     class Meta:
         model = User
         fields = ("name", "email", "image")
+
+class Project(db.Model):
+    __tablename__ = 'projects'
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String, nullable=False)
+    created_at = db.Column(db.DateTime, server_default=db.func.now())
+
+    lists = db.relationship("List", uselist=True, backref="projects")
+
+    def save_to_db(self):
+        db.session.add(self)
+        db.session.commit()
+
+class List(db.Model):
+    __tablename__ = 'lists'
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String, nullable=False)
+    created_at = db.Column(db.DateTime, server_default=db.func.now())
+
+    project_id = db.Column(db.Integer, db.ForeignKey('projects.id'))
+    tasks = db.relationship("Task", uselist=True, backref="lists")
+
+    def save_to_db(self):
+        db.session.add(self)
+        db.session.commit()
+
+class Task(db.Model):
+    __tablename__ = 'tasks'
+    id = db.Column(db.Integer, primary_key=True)
+    owner_id = db.Column(db.Integer, db.ForeignKey('users.id'))
+    name = db.Column(db.String, nullable=False)
+    description = db.Column(db.String, nullable=True)
+    due_date = db.Column(db.Date, nullable=True)
+    status = db.Column(db.String, nullable=False, default="New")
+    created_at = db.Column(db.DateTime, server_default=db.func.now())
+
+    list_id = db.Column(db.Integer, db.ForeignKey('lists.id'))
+
+    def save_to_db(self):
+        db.session.add(self)
+        db.session.commit()
+
+class TaskSchema(ma.SQLAlchemyAutoSchema):
+    class Meta:
+        model = Task
+
+
+
+
+class ListSchema(ma.SQLAlchemyAutoSchema):
+    class Meta:
+        model = List
+
+
+
+class ProjectSchema(ma.SQLAlchemyAutoSchema):
+    class Meta:
+        model = Project
+
+
 
 
 class RevokedTokenModel(db.Model):
