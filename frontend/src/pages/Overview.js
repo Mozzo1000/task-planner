@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import Container from '@mui/material/Container';
 import Grid from '@mui/material/Grid';
 import Divider from '@mui/material/Divider';
@@ -12,31 +12,59 @@ import { ListItemButton, ListItemText } from '@mui/material';
 import Greeting from '../components/Greeting';
 import AddTask from '../components/AddTask';
 import { Link } from "react-router-dom";
-
+import TaskService from "../services/task.service";
+import LinearProgress from '@mui/material/LinearProgress';
 function Overview() {
-  return (
-    <Container>
-        <Grid container spacing={3} direction="column" >
-            <Greeting /><br />
-            <AddTask />
-            <Grid item>
-                <Typography variant="h6">Tasks</Typography>
-                <Card>
-                    <List>
-                        <ListItem disablePadding>
-                            <ListItemButton dense component={Link} to="/tasks/1" >
-                                <ListItemIcon>
-                                    <Checkbox edge="start" disableRipple />
-                                </ListItemIcon>
-                                <ListItemText primary="task 1" />
-                            </ListItemButton>
-                        </ListItem>
-                    </List>
-                </Card>
+    const [tasks, setTasks] = useState();
+
+    useEffect(() => {
+        TaskService.getAllTasks().then(
+            response => {
+                setTasks(response.data);
+                console.log(response.data);
+            },
+            error => {
+                const resMessage = 
+                    (error.response &&
+                        error.response.data &&
+                        error.response.data.message) ||
+                    error.message ||
+                    error.toString();
+                console.log(resMessage);
+            }
+        )
+    }, []);
+
+
+    return (
+        <Container>
+            <Grid container spacing={3} direction="column" >
+                <Greeting /><br />
+                <AddTask />
+                <Grid item>
+                    <Typography variant="h6">Tasks</Typography>
+                    <Card>
+                        {tasks ? (
+                        <List>
+                            {tasks.map((task, index) => (
+                               <ListItem disablePadding>
+                                    <ListItemButton dense component={Link} to={"/tasks/" + task.id} >
+                                        <ListItemIcon>
+                                            <Checkbox edge="start" disableRipple />
+                                        </ListItemIcon>
+                                        <ListItemText primary={task.name} />
+                                    </ListItemButton>
+                                </ListItem> 
+                            ))}
+                        </List>
+                        ) : (
+                            <LinearProgress />
+                        )}
+                    </Card>
+                </Grid>
             </Grid>
-        </Grid>
-    </Container>
-    )
+        </Container>
+        )
 }
 
 export default Overview;
