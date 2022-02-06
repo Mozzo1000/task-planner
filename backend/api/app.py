@@ -5,6 +5,7 @@ from flask_jwt_extended import JWTManager
 import config
 from models import db, ma
 from routes.auth import auth_endpoint
+from routes.task import task_endpoint
 
 swagger_template = {
   "swagger": "2.0",
@@ -24,6 +25,7 @@ swagger = Swagger(app, template=swagger_template)
 jwt = JWTManager(app)
 
 app.register_blueprint(auth_endpoint)
+app.register_blueprint(task_endpoint)
 
 @app.route('/')
 def index():
