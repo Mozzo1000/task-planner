@@ -51,6 +51,7 @@ class Project(db.Model):
 class List(db.Model):
     __tablename__ = 'lists'
     id = db.Column(db.Integer, primary_key=True)
+    owner_id = db.Column(db.Integer, db.ForeignKey('users.id'))
     name = db.Column(db.String, nullable=False)
     created_at = db.Column(db.DateTime, server_default=db.func.now())
 
@@ -81,9 +82,6 @@ class TaskSchema(ma.SQLAlchemyAutoSchema):
     class Meta:
         model = Task
 
-
-
-
 class ListSchema(ma.SQLAlchemyAutoSchema):
     class Meta:
         model = List
@@ -93,6 +91,12 @@ class ListSchema(ma.SQLAlchemyAutoSchema):
 class ProjectSchema(ma.SQLAlchemyAutoSchema):
     class Meta:
         model = Project
+
+class ProjectListSchema(ma.SQLAlchemyAutoSchema):
+    lists = ma.Nested(ListSchema, many=True)
+    class Meta:
+        model = Project
+
 
 
 
