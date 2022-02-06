@@ -131,7 +131,7 @@ function Navbar() {
                                 onClose={handleCloseUserMenu}
                             >
                                 <MenuItem component={Link} to="/settings">
-                                    <Avatar /> Demo
+                                    <Avatar /> {currentUser["name"]}
                                 </MenuItem>
                                 <Divider />
                                 {settings.map((setting) => (
