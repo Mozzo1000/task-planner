@@ -22,12 +22,14 @@ import CalendarTodayIcon from '@mui/icons-material/CalendarToday';
 import LayersIcon from '@mui/icons-material/Layers';
 import LogoutIcon from '@mui/icons-material/Logout';
 import ProjectList from './ProjectList';
+import AuthService from '../services/auth.service';
 
 function Navbar() {
     let navigate = useNavigate();
     let location = useLocation();
     const title = "Task Planner"
-    
+    const currentUser = AuthService.getCurrentUser()
+
     const pages = [
         {name: 'Overview', link: "/", icon: <CalendarTodayIcon />},
         {name: 'Planner', link: "/planner", icon: <ScheduleIcon />},
@@ -57,6 +59,7 @@ function Navbar() {
 
     const handleSettingsItemClick = (e) => {
         if(e === "logout") {
+            AuthService.logout();
             navigate("/login");
         }
         handleCloseUserMenu();
@@ -64,6 +67,7 @@ function Navbar() {
 
     return (
         <>
+        { currentUser &&
         <Box sx={{display: 'flex'}}>
             <AppBar position="fixed" sx={{zIndex: 2, borderBottom: "1px solid #e0e0e0"}} color="inherit" elevation={0}>
                 <Container maxWidth="x1">
@@ -160,6 +164,7 @@ function Navbar() {
                 </Box>
             </Drawer>
         </Box>
+        }
         </>
     )
 }
