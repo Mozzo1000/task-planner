@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
 import Typography from '@mui/material/Typography';
@@ -12,8 +12,80 @@ import ListItemIcon from '@mui/material/ListItemIcon';
 import { Link } from "react-router-dom";
 import MoreVertIcon from '@mui/icons-material/MoreVert';
 import AddIcon from '@mui/icons-material/Add';
+import ProjectService from '../services/project.service';
+import ListService from '../services/list.service';
+import LinearProgress from '@mui/material/LinearProgress';
+import TextField from '@mui/material/TextField';
+import Dialog from '@mui/material/Dialog';
+import DialogActions from '@mui/material/DialogActions';
+import DialogContent from '@mui/material/DialogContent';
+import DialogContentText from '@mui/material/DialogContentText';
+import DialogTitle from '@mui/material/DialogTitle';
+import FormControl from '@mui/material/FormControl';
 
 function ProjectCard(props) {
+    const [lists, setLists] = useState();
+    const [openModal, setOpenModal] = useState(false);
+    const [newListName, setNewListName] = useState();
+    
+    const handleClickOpenModal = () => {
+        setOpenModal(true);
+    };
+
+    const handleCloseModal = () => {
+        setOpenModal(false);
+    };
+
+    const handleAddList = (e) => {
+        e.preventDefault();
+        ListService.add(newListName, props.id).then(
+            () => {
+                setOpenModal(false);
+                ProjectService.getLists(props.id).then(
+                    response => {
+                        setLists(response.data);
+                    },
+                    error => {
+                        const resMessage =
+                            (error.response &&
+                                error.response.data &&
+                                error.response.data.message) ||
+                            error.message ||
+                            error.toString();
+                        console.log(resMessage);
+                    }
+                )
+            },
+            (error) => {
+                const resMessage =
+                    (error.response &&
+                        error.response.data &&
+                        error.response.data.message) ||
+                    error.message ||
+                    error.toString();
+                console.log(resMessage);
+            }
+        );
+    }
+
+    useEffect(() => {
+        ProjectService.getLists(props.id).then(
+            response => {
+                setLists(response.data);
+                console.log(response.data)
+            },
+            error => {
+                const resMessage = 
+                    (error.response &&
+                        error.response.data &&
+                        error.response.data.message) ||
+                    error.message ||
+                    error.toString();
+                console.log(resMessage);
+            }
+        )
+    }, []);
+
     return (
         <Grid container direction="row">
             <Grid container direction="row" justifyContent="space-between" alignItems="center">
@@ -21,29 +93,47 @@ function ProjectCard(props) {
                     <Typography variant="h6">{props.title}</Typography>
                 </Grid>
                 <Grid item>
-                    <Button>Add list</Button>
+                    <Button onClick={handleClickOpenModal}>Add list</Button>
                 </Grid>
             </Grid>
             <Grid item xs={12}>
                 <Card>
                     <CardContent>
                         <List>
-                            <ListItem disablePadding>
-                                <ListItemButton dense component={Link} to="/lists/1" >
-                                    <ListItemText primary="List 1" />
-                                </ListItemButton>
-                                <MoreVertIcon />
-                            </ListItem>
-                            <ListItem disablePadding>
-                                <ListItemButton dense component={Link} to="/lists/1" >
-                                    <ListItemText primary="List 1" />
-                                </ListItemButton>
-                                <MoreVertIcon />
-                            </ListItem>
+                            {lists ? (
+                                lists.lists.map((list, index) => (
+                                    <ListItem disablePadding>
+                                        <ListItemButton dense component={Link} to={list.id} >
+                                            <ListItemText primary={list.name} />
+                                        </ListItemButton>
+                                        <MoreVertIcon />
+                                    </ListItem>
+                                ))
+                                
+                            ) : (
+                                <LinearProgress />
+                            )}
                         </List>
                     </CardContent>
                 </Card>
             </Grid>
+            <Dialog open={openModal} onClose={handleCloseModal}>
+                <DialogTitle>Add new list</DialogTitle>
+                <FormControl>
+                    <form onSubmit={handleAddList}>
+                        <DialogContent>
+                            <DialogContentText>
+                                Fill out the information below
+                            </DialogContentText>
+                            <TextField required autoFocus id="name" label="Name" margin="dense" fullWidth variant="standard" value={newListName} onChange={e => setNewListName(e.target.value)}/>
+                        </DialogContent>
+                        <DialogActions>
+                            <Button onClick={handleCloseModal}>Cancel</Button>
+                            <Button type="submit" color="primary" onClick={handleCloseModal}>Add</Button>
+                        </DialogActions>
+                    </form>
+                </FormControl>
+            </Dialog>
         </Grid>
     )
 }
