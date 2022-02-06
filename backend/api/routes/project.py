@@ -1,28 +1,33 @@
 from flask import Blueprint, request, jsonify
-from models import Project, ProjectSchema, db
+from models import Project, ProjectSchema, db, User
+from flask_jwt_extended import (jwt_required, get_jwt_identity)
+
 
 project_endpoint = Blueprint('project', __name__)
 
 @project_endpoint.route("/v1/projects/<id>")
+@jwt_required()
 def get_project(id):
     project_schema = ProjectSchema(many=False)
-    project = Project.query.get(id)
+    project = Project.query.filter_by(owner_id=User.find_by_email(get_jwt_identity()).id, id=id).first()
     return jsonify(project_schema.dump(project))
 
 @project_endpoint.route("/v1/projects")
+@jwt_required()
 def get_projects():
     project_schema = ProjectSchema(many=True)
-    project = Project.query.get(id)
+    project = Project.query.filter_by(owner_id=User.find_by_email(get_jwt_identity()).id).all()
     return jsonify(project_schema.dump(project))
 
 @project_endpoint.route("/v1/projects", methods=["POST"])
+@jwt_required()
 def add_project():
     if not "name" in request.json:
         return jsonify({
             "error": "Bad request",
             "message": "name not given"
         }), 400
-    new_project = Project(name=request.json["name"])
+    new_project = Project(owner_id=User.find_by_email(get_jwt_identity()).id, name=request.json["name"])
 
     new_project.save_to_db()
     return {
@@ -32,6 +37,7 @@ def add_project():
     }, 201
 
 @project_endpoint.route('/v1/projects/<id>', methods=["DELETE"])
+@jwt_required()
 def remove_project(id):
     project = Project.query.get(id)
     try: 
