@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useParams } from "react-router-dom";
 import Container from '@mui/material/Container';
 import Grid from '@mui/material/Grid';
@@ -15,17 +15,19 @@ import Select from '@mui/material/Select';
 import FormControl from '@mui/material/FormControl';
 import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
 import IconButton from '@mui/material/IconButton';
+import LinearProgress from '@mui/material/LinearProgress';
+import TaskService from '../services/task.service';
 
 function Tasks() {
     let { id } = useParams()
     const [content, setContent] = useState({});
     const [openEditDesc, setOpenEditDesc] = useState(false);
-    const [value, setValue] = React.useState("2022-01-31");
-    const [status, setStatus] = React.useState("Not started");
+    const [value, setValue] = React.useState("");
+    const [status, setStatus] = React.useState("");
     const [saveStatus, setSaveStatus] = React.useState(false);
 
     const renderChip = value => {
-        let color = "";
+        let color = "primary";
         if (value === "Not started") {
             color = "primary"
         }else if (value === "In progress") {
@@ -40,14 +42,34 @@ function Tasks() {
         setOpenEditDesc(!openEditDesc);
     }
 
+    useEffect(() => {
+        TaskService.getTask(id).then(
+            response => {
+                setContent(response.data);
+                setStatus(response.data.status);
+                setValue(response.data.due_date);
+            },
+            error => {
+                const resMessage = 
+                    (error.response &&
+                        error.response.data &&
+                        error.response.data.message) ||
+                    error.message ||
+                    error.toString();
+                console.log(resMessage);
+            }
+        )
+    }, []);
+
     return (
         <Container>
+            {content ? (
             <Grid container spacing={3} direction="row" justifyContent="flex-start" alignItems="center">
                 <Grid container item direction="row" justifyContent="space-between" alignItems="center">
                     <Grid item>
                         <Grid container direction="row" alignItems="center">
                             <Grid item>
-                                <h1>Test task</h1>
+                                <h1>{content.name}</h1>
                             </Grid>
                             <Grid item>
                                 <IconButton>
@@ -79,14 +101,15 @@ function Tasks() {
                 </Grid>
                 <Grid item md={2}>
                     <FormControl variant="standard">
-                    <Select disableUnderline inputProps={{
-            name: "badge",
-            id: "badge-simple"
-          }} value={status} onChange={e => setStatus(e.target.value)} renderValue={renderChip}>
-                        <Chip color="primary" value="Not started" label="Not started"/>
-                        <Chip color="secondary" value="In progress" label="In progress"/>
-                        <Chip color="success" value="Done" label="Done"/>
-                    </Select>
+                        <Select disableUnderline inputProps={{
+                                name: "badge",
+                                id: "badge-simple"
+                            }} 
+                            value={status} onChange={e => setStatus(e.target.value)} renderValue={renderChip}>
+                            <Chip color="primary" value="Not started" label="Not started"/>
+                            <Chip color="secondary" value="In progress" label="In progress"/>
+                            <Chip color="success" value="Done" label="Done"/>
+                        </Select>
                     </FormControl>
                 </Grid>
                 <Grid item xs={12}>
@@ -104,6 +127,9 @@ function Tasks() {
                     }
                 </Grid>
             </Grid>
+            ) : (
+                <LinearProgress />
+            )}
         </Container>
     )
 }
