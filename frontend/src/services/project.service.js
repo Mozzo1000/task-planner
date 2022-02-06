@@ -18,11 +18,15 @@ const get = (id) => {
   return axios.get(API_URL + "projects/" + id, { headers: authHeader() });
 };
 
+const getLists = (id) => {
+    return axios.get(API_URL + "projects/lists/" + id, { headers: authHeader() });
+};
 
 const exportedObject = {
     getAll,
     get,
     add,
+    getLists,
 };
 
 export default exportedObject;
