@@ -16,7 +16,7 @@ const addTask = (name, list_id) => {
 
 
 const getTask = (id) => {
-  return axios.get(API_URL + "tasks/" + id, {}, { headers: authHeader() });
+  return axios.get(API_URL + "tasks/" + id, { headers: authHeader() });
 };
 
 
