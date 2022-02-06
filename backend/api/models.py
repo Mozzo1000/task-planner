@@ -24,7 +24,6 @@ class List(db.Model):
     created_at = db.Column(db.DateTime, server_default=db.func.now())
 
     project_id = db.Column(db.Integer, db.ForeignKey('projects.id'))
-    project_info = db.relationship("Project")
     tasks = db.relationship("Task", uselist=True, backref="lists")
 
     def save_to_db(self):
