@@ -83,6 +83,7 @@ class TaskSchema(ma.SQLAlchemyAutoSchema):
         model = Task
 
 class ListSchema(ma.SQLAlchemyAutoSchema):
+    tasks = ma.Nested(TaskSchema, many=True)
     class Meta:
         model = List
 
@@ -96,10 +97,6 @@ class ProjectListSchema(ma.SQLAlchemyAutoSchema):
     lists = ma.Nested(ListSchema, many=True)
     class Meta:
         model = Project
-
-
-
-
 
 class RevokedTokenModel(db.Model):
     __tablename__ = 'revoked_tokens'
