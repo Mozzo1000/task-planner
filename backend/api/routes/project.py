@@ -24,6 +24,10 @@ def get_project(id):
 @jwt_required()
 def get_projects():
     project_schema = ProjectSchema(many=True)
+    if request.args.get('include_lists'):
+        include_lists = request.args.get('include_lists').lower()
+        if include_lists == "true":
+            project_schema = ProjectListSchema(many=True)
     project = Project.query.filter_by(owner_id=User.find_by_email(get_jwt_identity()).id).all()
     return jsonify(project_schema.dump(project))
 
