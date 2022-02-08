@@ -3,8 +3,12 @@ import authHeader from "./auth-header";
 
 const API_URL = "/v1/";
 
-const getAll = () => {
-    return axios.get(API_URL + "projects", { headers: authHeader() });
+const getAll = (filter) => {
+    if (!filter) {
+        return axios.get(API_URL + "projects", { headers: authHeader() });
+    }else {
+        return axios.get(API_URL + "projects" + filter, { headers: authHeader() });
+    }
 };
 
 const add = (name) => {
