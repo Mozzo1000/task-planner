@@ -1,36 +1,41 @@
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import List from '@mui/material/List';
-import ListItemButton from '@mui/material/ListItemButton';
-import ListItemIcon from '@mui/material/ListItemIcon';
-import ListItemText from '@mui/material/ListItemText';
-import Collapse from '@mui/material/Collapse';
-import ExpandLess from '@mui/icons-material/ExpandLess';
-import ExpandMore from '@mui/icons-material/ExpandMore';
-import { Link } from "react-router-dom";
+import ProjectService from '../services/project.service';
+import CircularProgress from '@mui/material/CircularProgress';
+import ProjectListItem from './ProjectListItem';
 
 function ProjectList() {
-    const [open, setOpen] = React.useState(true);
+    const [projects, setProjects] = useState();
 
-    const handleClick = () => {
-        setOpen(!open);
-    };
+    useEffect(() => {
+        ProjectService.getAll("?include_lists=true").then(
+            response => {
+                setProjects(response.data);
+                console.log(response.data)
+            },
+            error => {
+                const resMessage = 
+                    (error.response &&
+                        error.response.data &&
+                        error.response.data.message) ||
+                    error.message ||
+                    error.toString();
+                console.log(resMessage);
+            }
+        )
+    }, []);
 
     return (
         <List>
-            <ListItemButton onClick={handleClick}>
-                <ListItemText primary="Project 1 (2)" />
-                {open ? <ExpandLess /> : <ExpandMore />}
-            </ListItemButton>
-            <Collapse in={open} timeout="auto" unmountOnExit>
-                <List disablePadding>
-                    <ListItemButton sx={{ pl: 4 }} component={Link} to="/lists/1">
-                        <ListItemText primary="List 1" />
-                    </ListItemButton>
-                    <ListItemButton sx={{ pl: 4 }} component={Link} to="/lists/2">
-                        <ListItemText primary="List 2" />
-                    </ListItemButton>
-                </List>
-            </Collapse>
+            {projects ? (   
+                projects.map((project, index) => (
+                    <div key={index}>
+                        <ProjectListItem project={project} />
+                    </div>
+                ))
+            ): (
+                <CircularProgress />
+            )}
         </List>
     )
 }
