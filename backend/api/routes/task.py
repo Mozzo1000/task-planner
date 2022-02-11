@@ -37,13 +37,13 @@ def add_task():
     else:
         due_date = None
     
-    new_task = Task(name=request.json["name"], list_id=request.json["list_id"], description=description, due_date=due_date)
+    new_task = Task(name=request.json["name"], list_id=request.json["list_id"], description=description, due_date=due_date, owner_id=User.find_by_email(get_jwt_identity()).id)
 
     new_task.save_to_db()
     return {
         "id": new_task.id,
         "name": new_task.name,
-        "project_id": new_task.project_id,
+        "list_id": new_task.list_id,
         "created_at": new_task.created_at
     }, 201
 
