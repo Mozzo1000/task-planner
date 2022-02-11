@@ -1,5 +1,5 @@
 from flask import Blueprint, request, jsonify
-from models import List, ListSchema, db, User
+from models import List, ListSchema, db, User, Task, TaskSchema
 from flask_jwt_extended import (jwt_required, get_jwt_identity)
 
 list_endpoint = Blueprint('list', __name__)
@@ -8,8 +8,27 @@ list_endpoint = Blueprint('list', __name__)
 @jwt_required()
 def get_list(id):
     list_schema = ListSchema(many=False)
+    
     list = List.query.filter_by(owner_id=User.find_by_email(get_jwt_identity()).id, id=id).first()
     return jsonify(list_schema.dump(list))
+
+@list_endpoint.route("/v1/lists/<id>/tasks")
+@jwt_required()
+def get_tasks_in_list(id):
+    task_schema = TaskSchema(many=True)
+    if request.args.get('status'):
+        status = ""
+        argument = request.args.get('status').lower()
+        if argument == "completed":
+            status = "Completed"
+        elif argument == "in_progress":
+            status = "In progress"
+        elif argument == "not_started":
+            status = "Not started"
+        tasks = Task.query.filter_by(owner_id=User.find_by_email(get_jwt_identity()).id, list_id=id, status=status).all()
+    else:
+        tasks = Task.query.filter_by(owner_id=User.find_by_email(get_jwt_identity()).id, list_id=id).all()
+    return jsonify(task_schema.dump(tasks))
 
 @list_endpoint.route("/v1/lists", methods=["POST"])
 @jwt_required()
