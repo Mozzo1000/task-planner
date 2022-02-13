@@ -8,7 +8,7 @@ task_endpoint = Blueprint('task', __name__)
 @jwt_required()
 def get_all_tasks():
     task_schema = TaskSchema(many=True)
-    tasks = Task.query.filter_by(owner_id=User.find_by_email(get_jwt_identity()).id).all()
+    tasks = Task.query.filter_by(owner_id=User.find_by_email(get_jwt_identity()).id).order_by(Task.created_at.desc()).all()
     return jsonify(task_schema.dump(tasks))
 
 @task_endpoint.route("/v1/tasks/<id>")
