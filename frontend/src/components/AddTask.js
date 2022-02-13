@@ -7,15 +7,17 @@ import Button from '@mui/material/Button';
 import AddIcon from '@mui/icons-material/Add';
 import TaskService from '../services/task.service';
 
-function AddTask() {
+function AddTask(props) {
     const [name, setName] = useState();
 
-    const addTask = (e) => {
-        e.preventDefault();
+    const addTask = () => {
         TaskService.addTask(name, null).then(
             response => {
                 setName("");
                 console.log(response.data);
+                if (props.callback) {
+                    props.callback();
+                }
             },
             error => {
                 const resMessage = 
@@ -27,6 +29,12 @@ function AddTask() {
                 console.log(resMessage);
             }
         )
+    }
+
+    const keyPress = (e) => {
+        if (e.keyCode == 13) {
+            addTask();
+        }
     }
 
     return (
@@ -47,6 +55,7 @@ function AddTask() {
                     fullWidth
                     value={name}
                     onChange={e => setName(e.target.value)} 
+                    onKeyDown={keyPress}
                 />
             </Grid>
             <Grid item xs={2}>
