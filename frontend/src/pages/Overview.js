@@ -17,6 +17,24 @@ import LinearProgress from '@mui/material/LinearProgress';
 function Overview() {
     const [tasks, setTasks] = useState();
 
+    const onTaskAdded = () => {
+        TaskService.getAllTasks().then(
+            response => {
+                setTasks(response.data);
+                console.log(response.data);
+            },
+            error => {
+                const resMessage = 
+                    (error.response &&
+                        error.response.data &&
+                        error.response.data.message) ||
+                    error.message ||
+                    error.toString();
+                console.log(resMessage);
+            }
+        )
+    };
+
     useEffect(() => {
         TaskService.getAllTasks().then(
             response => {
@@ -40,7 +58,7 @@ function Overview() {
         <Container>
             <Grid container spacing={3} direction="column" >
                 <Greeting /><br />
-                <AddTask />
+                <AddTask callback={onTaskAdded} />
                 <Grid item>
                     <Typography variant="h6">Tasks</Typography>
                     <Card>
