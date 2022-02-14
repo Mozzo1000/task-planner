@@ -4,6 +4,22 @@ from flask_jwt_extended import (jwt_required, get_jwt_identity)
 
 task_endpoint = Blueprint('task', __name__)
 
+@task_endpoint.route("/v1/tasks/<id>", methods=["PATCH"])
+@jwt_required()
+def edit_task(id):
+    task = Task.query.filter_by(id=id, owner_id=User.find_by_email(get_jwt_identity()).id).first()
+    if "name" in request.json:
+        task.name = request.json["name"]
+    if "description" in request.json:
+        task.description = request.json["description"]
+    if "status" in request.json:
+        task.status = request.json["status"]
+    if "due_date" in request.json:
+        task.due_date = request.json["due_date"]
+
+    task.save_to_db()
+    return jsonify({'message': f'Task saved successfully'}), 200
+
 @task_endpoint.route("/v1/tasks")
 @jwt_required()
 def get_all_tasks():
