@@ -19,11 +19,16 @@ const getTask = (id) => {
   return axios.get(API_URL + "tasks/" + id, { headers: authHeader() });
 };
 
-
+const editTask = (id, data) => {
+  return axios.patch(API_URL + "tasks/" + id, {
+    ...data,
+  }, { headers: authHeader() });
+};
 const exportedObject = {
     getAllTasks,
     getTask,
     addTask,
+    editTask,
 };
 
 export default exportedObject;
