@@ -20,6 +20,7 @@ import TaskService from '../services/task.service';
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
 import EditIcon from '@mui/icons-material/Edit';
+import Snackbar from '@mui/material/Snackbar';
 
 function Tasks() {
     let { id } = useParams()
@@ -31,6 +32,8 @@ function Tasks() {
     const [description, setDescription] = useState();
     const [name, setName] = useState();
     const [openEditName, setOpenEditName] = useState(false);
+    const [openStatusMessage, setOpenStatusMessage] = useState(false);
+    const [statusMessage, setStatusMessage] = useState("");
 
     const [menuAnchorEl, setMenuAnchorEl] = useState(null);
     const openMenu = Boolean(menuAnchorEl);
@@ -87,6 +90,8 @@ function Tasks() {
             response => {
                 console.log(response.data);
                 setSaveButton(false);
+                setStatusMessage(response.data.message);
+                setOpenStatusMessage(true);
             },
             error => {
                 const resMessage = 
@@ -95,7 +100,8 @@ function Tasks() {
                         error.response.data.message) ||
                     error.message ||
                     error.toString();
-                console.log(resMessage);
+                setStatusMessage(resMessage);
+                setOpenStatusMessage(true);
             }
         )
     };
@@ -117,9 +123,15 @@ function Tasks() {
                     error.message ||
                     error.toString();
                 console.log(resMessage);
+                setStatusMessage(resMessage);
+                setOpenStatusMessage(true);
             }
         )
     }, []);
+
+    const handleCloseMessage = () => {
+        setOpenStatusMessage(false);
+    };
 
     return (
         <Container>
@@ -198,6 +210,7 @@ function Tasks() {
             ) : (
                 <LinearProgress />
             )}
+            <Snackbar open={openStatusMessage} autoHideDuration={6000} onClose={handleCloseMessage} message={statusMessage} />
         </Container>
     )
 }
