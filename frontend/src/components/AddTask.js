@@ -11,7 +11,12 @@ function AddTask(props) {
     const [name, setName] = useState();
 
     const addTask = () => {
-        TaskService.addTask(name, null).then(
+        let listId = null;
+        if (props.listId) {
+            listId = props.listId;
+        }
+
+        TaskService.addTask(name, listId).then(
             response => {
                 setName("");
                 console.log(response.data);

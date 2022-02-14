@@ -36,7 +36,7 @@ function Lists() {
 
     useEffect(() => {
         if (openCompletedTasks) {
-            ListService.getTasksInList(id, "completed").then(
+            ListService.getTasksInList(id, "done").then(
                 response => {
                     setCompletedTasks(response.data);
                     console.log(response.data);
@@ -98,7 +98,7 @@ function Lists() {
             </Grid>
             <Card>
                 <CardContent>
-                    <AddTask />
+                    <AddTask listId={id}/>
                     <List>
                         {tasks?.map((task, index) => (
                             <ListItem key={index} disablePadding>
@@ -118,18 +118,26 @@ function Lists() {
             <Collapse in={openCompletedTasks} timeout="auto" unmountOnExit>
             <Card>
                 <CardContent>
-                    <List>
-                        {completedTasks?.map((task) => (
-                            <ListItem disablePadding>
-                            <ListItemButton dense>
-                                <ListItemIcon>
-                                    <Checkbox edge="start" checked disableRipple />
-                                </ListItemIcon>
-                                <ListItemText sx={{textDecoration: "line-through"}} primary={task.name} />
-                            </ListItemButton>
-                            </ListItem>
-                        ))}
-                    </List>
+                    {completedTasks && (
+                        <>
+                        <List>
+                            {completedTasks.map((task) => (
+                                <ListItem disablePadding>
+                                <ListItemButton dense>
+                                    <ListItemIcon>
+                                        <Checkbox edge="start" checked disableRipple />
+                                    </ListItemIcon>
+                                    <ListItemText sx={{textDecoration: "line-through"}} primary={task.name} />
+                                </ListItemButton>
+                                </ListItem>
+                            ))}
+                        </List>
+                        {!completedTasks.length && (
+                            <Typography>You have no completed tasks in this list.</Typography>
+                        )}
+                        </>
+                    )}
+                    
                 </CardContent>
             </Card>
             </Collapse>
