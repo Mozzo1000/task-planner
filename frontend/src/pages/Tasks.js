@@ -17,6 +17,9 @@ import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
 import IconButton from '@mui/material/IconButton';
 import LinearProgress from '@mui/material/LinearProgress';
 import TaskService from '../services/task.service';
+import Menu from '@mui/material/Menu';
+import MenuItem from '@mui/material/MenuItem';
+import EditIcon from '@mui/icons-material/Edit';
 
 function Tasks() {
     let { id } = useParams()
@@ -27,6 +30,10 @@ function Tasks() {
     const [saveButton, setSaveButton] = useState(false);
     const [description, setDescription] = useState();
     const [name, setName] = useState();
+    const [openEditName, setOpenEditName] = useState(false);
+
+    const [menuAnchorEl, setMenuAnchorEl] = useState(null);
+    const openMenu = Boolean(menuAnchorEl);
 
     const renderChip = value => {
         let color = "primary";
@@ -39,6 +46,13 @@ function Tasks() {
         }
         return <Chip color={color} label={status} />;
     };
+
+    const handleClickMenu = (event) => {
+        setMenuAnchorEl(event.currentTarget);
+      };
+      const handleCloseMenu = () => {
+        setMenuAnchorEl(null);
+      };
     
     const handleOpenEditDesc = () => {
         setOpenEditDesc(!openEditDesc);
@@ -62,6 +76,11 @@ function Tasks() {
 
         if (content.status != status) {
             modifiedData["status"] = status;
+        }
+
+        if (content.name != name) {
+            modifiedData["name"] = name;
+            setOpenEditName(false);
         }
 
         TaskService.editTask(id, modifiedData).then(
@@ -110,12 +129,19 @@ function Tasks() {
                     <Grid item>
                         <Grid container direction="row" alignItems="center">
                             <Grid item>
-                                <h1>{name}</h1>
+                                {!openEditName ? (
+                                    <h1>{name}</h1>
+                                ): (
+                                   <TextField onChange={e => (setName(e.target.value), setSaveButton(e.target.value))} value={name}/> 
+                                )}
                             </Grid>
                             <Grid item>
                                 <IconButton>
-                                    <MoreHorizIcon />
+                                    <IconButton onClick={handleClickMenu} ><MoreHorizIcon /></IconButton>
                                 </IconButton>
+                                <Menu anchorEl={menuAnchorEl} open={openMenu} onClose={handleCloseMenu}>
+                                    <MenuItem onClick={setOpenEditName}><EditIcon/> Rename</MenuItem>
+                                </Menu>
                             </Grid>
                         </Grid>
                     </Grid>
