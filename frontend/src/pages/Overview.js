@@ -18,7 +18,7 @@ function Overview() {
     const [tasks, setTasks] = useState();
 
     const onTaskAdded = () => {
-        TaskService.getAllTasks().then(
+        TaskService.getAllTasks("?include_done=false").then(
             response => {
                 setTasks(response.data);
                 console.log(response.data);
@@ -36,7 +36,7 @@ function Overview() {
     };
 
     useEffect(() => {
-        TaskService.getAllTasks().then(
+        TaskService.getAllTasks("?include_done=false").then(
             response => {
                 setTasks(response.data);
                 console.log(response.data);
