@@ -3,8 +3,12 @@ import authHeader from "./auth-header";
 
 const API_URL = "/v1/";
 
-const getAllTasks = () => {
-    return axios.get(API_URL + "tasks", { headers: authHeader() });
+const getAllTasks = (filter) => {
+    if (!filter) {
+      return axios.get(API_URL + "tasks", { headers: authHeader() });
+    } else {
+      return axios.get(API_URL + "tasks" + filter, { headers: authHeader() });
+    }
 };
 
 const addTask = (name, list_id) => {
