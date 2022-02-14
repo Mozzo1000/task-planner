@@ -19,15 +19,15 @@ def get_tasks_in_list(id):
     if request.args.get('status'):
         status = ""
         argument = request.args.get('status').lower()
-        if argument == "completed":
-            status = "Completed"
+        if argument == "done":
+            status = "Done"
         elif argument == "in_progress":
             status = "In progress"
         elif argument == "not_started":
             status = "Not started"
         tasks = Task.query.filter_by(owner_id=User.find_by_email(get_jwt_identity()).id, list_id=id, status=status).all()
     else:
-        tasks = Task.query.filter(Task.owner_id == User.find_by_email(get_jwt_identity()).id, Task.list_id == id, Task.status != "Completed").all()
+        tasks = Task.query.filter(Task.owner_id == User.find_by_email(get_jwt_identity()).id, Task.list_id == id, Task.status != "Done").all()
     return jsonify(task_schema.dump(tasks))
 
 @list_endpoint.route("/v1/lists", methods=["POST"])
