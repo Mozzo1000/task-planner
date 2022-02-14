@@ -157,7 +157,7 @@ function Tasks() {
                 <Grid item xs={12}>
                     <Typography variant="h5">{<FormatAlignLeftIcon />} Description</Typography>
                     {description && !openEditDesc ? (
-                        <Typography onDoubleClick={handleOpenEditDesc}>{description}</Typography>
+                        <Typography onDoubleClick={handleOpenEditDesc}><pre style={{fontFamily: "inherit"}}>{description}</pre></Typography>
                     ): !openEditDesc &&(
                         <Typography sx={{fontStyle: "italic", justifyContent: "center"}}>No description available yet. <Link onClick={handleOpenEditDesc}>Edit</Link></Typography>
                     )}
