@@ -38,7 +38,7 @@ function AddTask(props) {
     }
 
     return (
-        <Grid container spacing={3} direction="row">
+        <Grid container spacing={3} direction="row" alignItems="center">
             <Grid item xs={10}>
                 <TextField
                     id="input-with-icon-textfield"
@@ -50,7 +50,7 @@ function AddTask(props) {
                         </InputAdornment>
                         ),
                     }}
-                    variant="standard"
+                    variant="outlined"
                     autoFocus
                     fullWidth
                     value={name}

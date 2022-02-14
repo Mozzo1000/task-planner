@@ -56,9 +56,11 @@ function Overview() {
 
     return (
         <Container>
-            <Grid container spacing={3} direction="column" >
-                <Greeting /><br />
-                <AddTask callback={onTaskAdded} />
+            <Grid container spacing={3} direction="column" justifyContent="center" >
+                <Grid item>
+                    <Greeting /><br />
+                    <AddTask callback={onTaskAdded} />
+                </Grid>
                 <Grid item>
                     <Typography variant="h6">Tasks</Typography>
                     <Card>
