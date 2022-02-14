@@ -161,10 +161,12 @@ function Tasks() {
                         <Button variant="contained" onClick={save} disabled={!saveButton}>Save</Button>
                     </Grid>
                 </Grid>
-                <Grid item md={2}>
+                <Grid item md={3}>
                     <Breadcrumbs>
-                        <Typography variant="subtitle1">List 1</Typography>
-                        <Typography variant="subtitle1">Test task</Typography>
+                        {content.list && (
+                            <Typography variant="subtitle1">{content.list.name}</Typography>
+                        )}
+                        <Typography variant="subtitle1">{name}</Typography>
                     </Breadcrumbs>
                 </Grid>
                 <Grid item md={2}>
