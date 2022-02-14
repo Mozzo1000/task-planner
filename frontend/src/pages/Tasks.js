@@ -22,9 +22,11 @@ function Tasks() {
     let { id } = useParams()
     const [content, setContent] = useState({});
     const [openEditDesc, setOpenEditDesc] = useState(false);
-    const [value, setValue] = React.useState("");
-    const [status, setStatus] = React.useState("");
-    const [saveStatus, setSaveStatus] = React.useState(false);
+    const [value, setValue] = useState("");
+    const [status, setStatus] = useState("");
+    const [saveButton, setSaveButton] = useState(false);
+    const [description, setDescription] = useState();
+    const [name, setName] = useState();
 
     const renderChip = value => {
         let color = "primary";
@@ -42,12 +44,51 @@ function Tasks() {
         setOpenEditDesc(!openEditDesc);
     }
 
+    const closeAndClearEditDesc = () => {
+        handleOpenEditDesc();
+        setDescription(content.description);
+        setSaveButton(false);
+    }
+
+    const save = () => {
+        let modifiedData = {};
+        if (content.description != description) {
+            modifiedData["description"] = description;
+            handleOpenEditDesc();
+        }
+        if (content.due_date != value) {
+            modifiedData["due_date"] = value;
+        }
+
+        if (content.status != status) {
+            modifiedData["status"] = status;
+        }
+
+        TaskService.editTask(id, modifiedData).then(
+            response => {
+                console.log(response.data);
+                setSaveButton(false);
+            },
+            error => {
+                const resMessage = 
+                    (error.response &&
+                        error.response.data &&
+                        error.response.data.message) ||
+                    error.message ||
+                    error.toString();
+                console.log(resMessage);
+            }
+        )
+    };
+
     useEffect(() => {
         TaskService.getTask(id).then(
             response => {
                 setContent(response.data);
                 setStatus(response.data.status);
                 setValue(response.data.due_date);
+                setDescription(response.data.description);
+                setName(response.data.name);
             },
             error => {
                 const resMessage = 
@@ -69,7 +110,7 @@ function Tasks() {
                     <Grid item>
                         <Grid container direction="row" alignItems="center">
                             <Grid item>
-                                <h1>{content.name}</h1>
+                                <h1>{name}</h1>
                             </Grid>
                             <Grid item>
                                 <IconButton>
@@ -79,7 +120,7 @@ function Tasks() {
                         </Grid>
                     </Grid>
                     <Grid item>
-                        <Button variant="contained" disabled={!saveStatus}>Save</Button>
+                        <Button variant="contained" onClick={save} disabled={!saveButton}>Save</Button>
                     </Grid>
                 </Grid>
                 <Grid item md={2}>
@@ -95,6 +136,7 @@ function Tasks() {
                         InputProps={{ startAdornment: <AccessTimeIcon />, disableUnderline: false }}
                         onChange={(newValue) => {
                             setValue(newValue);
+                            setSaveButton(newValue);
                         }}
                         renderInput={(params) => <TextField variant="standard" {...params}>{value}</TextField>}
                     />
@@ -105,7 +147,7 @@ function Tasks() {
                                 name: "badge",
                                 id: "badge-simple"
                             }} 
-                            value={status} onChange={e => setStatus(e.target.value)} renderValue={renderChip}>
+                            value={status} onChange={e => (setStatus(e.target.value), setSaveButton(e.target.value))} renderValue={renderChip}>
                             <Chip color="primary" value="Not started" label="Not started"/>
                             <Chip color="secondary" value="In progress" label="In progress"/>
                             <Chip color="success" value="Done" label="Done"/>
@@ -114,15 +156,15 @@ function Tasks() {
                 </Grid>
                 <Grid item xs={12}>
                     <Typography variant="h5">{<FormatAlignLeftIcon />} Description</Typography>
-                    {content.description && !openEditDesc ? (
-                        <Typography>{content.description}</Typography>
+                    {description && !openEditDesc ? (
+                        <Typography onDoubleClick={handleOpenEditDesc}>{description}</Typography>
                     ): !openEditDesc &&(
                         <Typography sx={{fontStyle: "italic", justifyContent: "center"}}>No description available yet. <Link onClick={handleOpenEditDesc}>Edit</Link></Typography>
                     )}
                     {openEditDesc && 
                         <>
-                            <TextField multiline={true} fullWidth></TextField>
-                            <Button onClick={handleOpenEditDesc}>Close</Button>
+                            <TextField onChange={e => (setDescription(e.target.value), setSaveButton(e.target.value))} multiline={true} fullWidth value={description}></TextField>
+                            <Button onClick={closeAndClearEditDesc}>Cancel</Button>
                         </>
                     }
                 </Grid>
