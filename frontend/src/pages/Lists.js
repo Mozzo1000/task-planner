@@ -12,7 +12,7 @@ import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
 import Checkbox from '@mui/material/Checkbox';
 import Typography from '@mui/material/Typography';
-import Link from '@mui/material/Link';
+import LinkMUI from '@mui/material/Link';
 import ExpandLess from '@mui/icons-material/ExpandLess';
 import ExpandMore from '@mui/icons-material/ExpandMore';
 import Collapse from '@mui/material/Collapse';
@@ -20,6 +20,7 @@ import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
 import IconButton from '@mui/material/IconButton';
 import ListService from '../services/list.service';
 import Chip from '@mui/material/Chip';
+import { Link } from "react-router-dom";
 
 function Lists() {
     const { id } = useParams();
@@ -101,7 +102,7 @@ function Lists() {
                     <List>
                         {tasks?.map((task, index) => (
                             <ListItem key={index} disablePadding>
-                                <ListItemButton dense>
+                                <ListItemButton dense component={Link} to={"/tasks/" + task.id}>
                                     <ListItemIcon>
                                         <Checkbox edge="start" disableRipple />
                                     </ListItemIcon>
@@ -113,7 +114,7 @@ function Lists() {
                     </List>
                 </CardContent>
             </Card>
-            <Typography component={Link} onClick={handleOpenCompletedTasks}>Completed tasks {openCompletedTasks ? <ExpandLess /> : <ExpandMore />}</Typography>
+            <Typography component={LinkMUI} onClick={handleOpenCompletedTasks}>Completed tasks {openCompletedTasks ? <ExpandLess /> : <ExpandMore />}</Typography>
             <Collapse in={openCompletedTasks} timeout="auto" unmountOnExit>
             <Card>
                 <CardContent>

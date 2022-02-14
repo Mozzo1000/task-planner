@@ -103,7 +103,7 @@ function ProjectCard(props) {
                             {lists ? (
                                 lists.lists.map((list, index) => (
                                     <ListItem disablePadding>
-                                        <ListItemButton dense component={Link} to={list.id} >
+                                        <ListItemButton dense component={Link} to={"/lists/" + list.id} >
                                             <ListItemText primary={list.name} />
                                         </ListItemButton>
                                         <MoreVertIcon />
