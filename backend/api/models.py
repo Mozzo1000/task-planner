@@ -73,12 +73,21 @@ class Task(db.Model):
     created_at = db.Column(db.DateTime, server_default=db.func.now())
 
     list_id = db.Column(db.Integer, db.ForeignKey('lists.id'))
+    list = db.relationship("List", uselist=False)
 
     def save_to_db(self):
         db.session.add(self)
         db.session.commit()
 
+class ListOnlySchema(ma.SQLAlchemySchema):
+    id = ma.auto_field()
+    name = ma.auto_field()
+    
+    class Meta:
+        model = List
+
 class TaskSchema(ma.SQLAlchemyAutoSchema):
+    list = ma.Nested(ListOnlySchema, many=False)
     class Meta:
         model = Task
 
