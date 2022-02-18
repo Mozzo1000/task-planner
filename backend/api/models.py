@@ -68,7 +68,7 @@ class Task(db.Model):
     owner_id = db.Column(db.Integer, db.ForeignKey('users.id'))
     name = db.Column(db.String, nullable=False)
     description = db.Column(db.String, nullable=True)
-    due_date = db.Column(db.Date, nullable=True)
+    due_date = db.Column(db.DateTime, nullable=True)
     status = db.Column(db.String, nullable=False, default="Not started")
     created_at = db.Column(db.DateTime, server_default=db.func.now())
 
