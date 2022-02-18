@@ -9,7 +9,7 @@ import Link from '@mui/material/Link';
 import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
 import AccessTimeIcon from '@mui/icons-material/AccessTime';
-import DatePicker from '@mui/lab/MobileDatePicker';
+import DateTimePicker from '@mui/lab/MobileDateTimePicker';
 import Chip from '@mui/material/Chip';
 import Select from '@mui/material/Select';
 import FormControl from '@mui/material/FormControl';
@@ -21,6 +21,7 @@ import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
 import EditIcon from '@mui/icons-material/Edit';
 import Snackbar from '@mui/material/Snackbar';
+import { ICalendar } from 'datebook'
 
 function Tasks() {
     let { id } = useParams()
@@ -37,6 +38,17 @@ function Tasks() {
 
     const [menuAnchorEl, setMenuAnchorEl] = useState(null);
     const openMenu = Boolean(menuAnchorEl);
+      
+    const createICS = () => {
+        const icalendar = new ICalendar({
+            title: name,
+            description: description,
+            start: new Date(),
+            end: new Date(value),
+          })
+          console.log(value);
+          icalendar.download();
+    };
 
     const renderChip = value => {
         let color = "primary";
@@ -170,7 +182,7 @@ function Tasks() {
                     </Breadcrumbs>
                 </Grid>
                 <Grid item md={2}>
-                    <DatePicker
+                    <DateTimePicker
                         value={value}
                         clearable
                         InputProps={{ startAdornment: <AccessTimeIcon />, disableUnderline: false }}
@@ -179,6 +191,7 @@ function Tasks() {
                             setSaveButton(newValue);
                         }}
                         label="Due date"
+                        ampm={false}
                         renderInput={(params) => <TextField variant="standard" {...params}>{value}</TextField>}
                     />
                 </Grid>
@@ -194,6 +207,9 @@ function Tasks() {
                             <Chip color="success" value="Done" label="Done"/>
                         </Select>
                     </FormControl>
+                </Grid>
+                <Grid item md={2}>
+                    <Button onClick={() => createICS()} variant="contained">Download ICS</Button>
                 </Grid>
                 <Grid item xs={12}>
                     <Typography variant="h5">{<FormatAlignLeftIcon />} Description</Typography>
