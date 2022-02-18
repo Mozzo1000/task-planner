@@ -22,6 +22,9 @@ import MenuItem from '@mui/material/MenuItem';
 import EditIcon from '@mui/icons-material/Edit';
 import Snackbar from '@mui/material/Snackbar';
 import { ICalendar } from 'datebook'
+import DownloadIcon from '@mui/icons-material/Download';
+import ListItemIcon from '@mui/material/ListItemIcon';
+import ListItemText from '@mui/material/ListItemText';
 
 function Tasks() {
     let { id } = useParams()
@@ -164,7 +167,14 @@ function Tasks() {
                                     <IconButton onClick={handleClickMenu} ><MoreHorizIcon /></IconButton>
                                 </IconButton>
                                 <Menu anchorEl={menuAnchorEl} open={openMenu} onClose={handleCloseMenu}>
-                                    <MenuItem onClick={setOpenEditName}><EditIcon/> Rename</MenuItem>
+                                    <MenuItem onClick={setOpenEditName}>
+                                        <ListItemIcon><EditIcon/></ListItemIcon>
+                                        <ListItemText>Rename</ListItemText>
+                                    </MenuItem>
+                                    <MenuItem onClick={() => createICS()}>
+                                        <ListItemIcon><DownloadIcon/></ListItemIcon>
+                                        <ListItemText>Download ICS</ListItemText>
+                                    </MenuItem>
                                 </Menu>
                             </Grid>
                         </Grid>
@@ -207,9 +217,6 @@ function Tasks() {
                             <Chip color="success" value="Done" label="Done"/>
                         </Select>
                     </FormControl>
-                </Grid>
-                <Grid item md={2}>
-                    <Button onClick={() => createICS()} variant="contained">Download ICS</Button>
                 </Grid>
                 <Grid item xs={12}>
                     <Typography variant="h5">{<FormatAlignLeftIcon />} Description</Typography>
