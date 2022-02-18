@@ -178,6 +178,7 @@ function Tasks() {
                             setValue(newValue);
                             setSaveButton(newValue);
                         }}
+                        label="Due date"
                         renderInput={(params) => <TextField variant="standard" {...params}>{value}</TextField>}
                     />
                 </Grid>
