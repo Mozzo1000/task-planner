@@ -14,9 +14,18 @@ import AddTask from '../components/AddTask';
 import { Link } from "react-router-dom";
 import TaskService from "../services/task.service";
 import LinearProgress from '@mui/material/LinearProgress';
+import Snackbar from '@mui/material/Snackbar';
+import TaskItem from '../components/TaskItem';
+
 function Overview() {
     const [tasks, setTasks] = useState();
-
+    const [openStatusMessage, setOpenStatusMessage] = useState(false);
+    const [statusMessage, setStatusMessage] = useState("");
+    
+    const handleCloseMessage = () => {
+        setOpenStatusMessage(false);
+    };
+    
     const onTaskAdded = () => {
         TaskService.getAllTasks("?include_done=false").then(
             response => {
@@ -67,14 +76,7 @@ function Overview() {
                         {tasks ? (
                         <List>
                             {tasks.map((task, index) => (
-                               <ListItem disablePadding>
-                                    <ListItemButton dense component={Link} to={"/tasks/" + task.id} >
-                                        <ListItemIcon>
-                                            <Checkbox edge="start" disableRipple />
-                                        </ListItemIcon>
-                                        <ListItemText primary={task.name} />
-                                    </ListItemButton>
-                                </ListItem> 
+                               <TaskItem id={task.id} name={task.name} status={task.status} onSuccess={onTaskAdded} />
                             ))}
                         </List>
                         ) : (
@@ -83,6 +85,7 @@ function Overview() {
                     </Card>
                 </Grid>
             </Grid>
+            <Snackbar open={openStatusMessage} autoHideDuration={6000} onClose={handleCloseMessage} message={statusMessage} />
         </Container>
         )
 }

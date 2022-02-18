@@ -21,6 +21,7 @@ import IconButton from '@mui/material/IconButton';
 import ListService from '../services/list.service';
 import Chip from '@mui/material/Chip';
 import { Link } from "react-router-dom";
+import TaskItem from '../components/TaskItem';
 
 function Lists() {
     const { id } = useParams();
@@ -32,6 +33,23 @@ function Lists() {
 
     const handleOpenCompletedTasks = () => {
         setOpenCompletedTasks(!openCompletedTasks);
+    };
+
+    const onTaskAdded = () => {
+        ListService.getTasksInList(id).then(
+            response => {
+                setTasks(response.data);
+            },
+            error => {
+                const resMessage = 
+                    (error.response &&
+                        error.response.data &&
+                        error.response.data.message) ||
+                    error.message ||
+                    error.toString();
+                console.log(resMessage);
+            }
+        )
     };
 
     useEffect(() => {
@@ -98,18 +116,10 @@ function Lists() {
             </Grid>
             <Card>
                 <CardContent>
-                    <AddTask listId={id}/>
+                    <AddTask listId={id} callback={onTaskAdded}/>
                     <List>
                         {tasks?.map((task, index) => (
-                            <ListItem key={index} disablePadding>
-                                <ListItemButton dense component={Link} to={"/tasks/" + task.id}>
-                                    <ListItemIcon>
-                                        <Checkbox edge="start" disableRipple />
-                                    </ListItemIcon>
-                                    <ListItemText primary={task.name} />
-                                    <Chip label={task.status}/>
-                                </ListItemButton>
-                            </ListItem>
+                            <TaskItem id={task.id} name={task.name} status={task.status} onSuccess={onTaskAdded} />
                         ))}
                     </List>
                 </CardContent>
