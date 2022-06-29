@@ -55,8 +55,10 @@ function TaskItem(props) {
             </ListItemIcon>
             <ListItemButton component={Link} to={"/tasks/" + props.id} >    
                 <ListItemText primary={props.name} />
-                <Chip label={props.status}/>
             </ListItemButton>
+            <ListItemIcon>
+            <Chip label={props.status}/>
+            </ListItemIcon>
         </ListItem>
         <Snackbar open={openStatusMessage} autoHideDuration={6000} onClose={handleCloseMessage} message={statusMessage} />
         </>
