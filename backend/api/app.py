@@ -8,6 +8,7 @@ from routes.auth import auth_endpoint
 from routes.task import task_endpoint
 from routes.project import project_endpoint
 from routes.list import list_endpoint
+from flask_cors import CORS
 
 swagger_template = {
   "swagger": "2.0",
@@ -20,6 +21,7 @@ swagger_template = {
 
 app = Flask(__name__)
 app.config.from_object(config.Config)
+CORS(app)
 db.init_app(app)
 ma.init_app(app)
 migrate = Migrate(app, db)
