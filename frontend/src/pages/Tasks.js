@@ -25,6 +25,7 @@ import { ICalendar } from 'datebook'
 import DownloadIcon from '@mui/icons-material/Download';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
+import ReactMarkdown from 'react-markdown';
 
 function Tasks() {
     let { id } = useParams()
@@ -221,7 +222,7 @@ function Tasks() {
                 <Grid item xs={12}>
                     <Typography variant="h5">{<FormatAlignLeftIcon />} Description</Typography>
                     {description && !openEditDesc ? (
-                        <Typography onDoubleClick={handleOpenEditDesc}><pre style={{fontFamily: "inherit"}}>{description}</pre></Typography>
+                        <Typography onDoubleClick={handleOpenEditDesc}><ReactMarkdown>{description}</ReactMarkdown></Typography>
                     ): !openEditDesc &&(
                         <Typography sx={{fontStyle: "italic", justifyContent: "center"}}>No description available yet. <Link onClick={handleOpenEditDesc}>Edit</Link></Typography>
                     )}
