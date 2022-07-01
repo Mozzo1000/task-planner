@@ -6,9 +6,24 @@ import InputAdornment from '@mui/material/InputAdornment';
 import Button from '@mui/material/Button';
 import AddIcon from '@mui/icons-material/Add';
 import TaskService from '../services/task.service';
+import Fab from '@mui/material/Fab';
+import Box from '@mui/material/Box';
+import Drawer from '@mui/material/Drawer';
+import SendIcon from '@mui/icons-material/Send';
+import IconButton from '@mui/material/IconButton';
 
 function AddTask(props) {
     const [name, setName] = useState();
+    const [open, setOpen] = useState(false);
+
+    const handleClickOpen = () => {
+        setOpen(true);
+    };
+    
+    const handleClose = () => {
+        setOpen(false);
+    };
+    
 
     const addTask = () => {
         let listId = null;
@@ -20,6 +35,7 @@ function AddTask(props) {
             response => {
                 setName("");
                 console.log(response.data);
+                handleClose();
                 if (props.callback) {
                     props.callback();
                 }
@@ -43,7 +59,8 @@ function AddTask(props) {
     }
 
     return (
-        <Grid container spacing={3} direction="row" alignItems="center">
+        <>
+        <Grid container spacing={3} direction="row" alignItems="center" sx={{display: {xs: "none", sm: "flex"}}}>
             <Grid item xs={10}>
                 <TextField
                     id="input-with-icon-textfield"
@@ -67,6 +84,28 @@ function AddTask(props) {
                 <Button variant="contained" startIcon={<AddIcon />} disabled={!name} onClick={addTask} fullWidth>Add</Button>
             </Grid>
         </Grid>
+        <Box sx={{display: {xs: "flex", sm: "none"} }}>
+            <Fab color="primary" sx={{position: "absolute", bottom: 32, right: 32}} onClick={handleClickOpen}>
+                <AddIcon />
+            </Fab>
+        </Box>
+
+        <Drawer anchor="bottom" open={open} onClose={handleClose}>
+            <TextField placeholder="Add a new task..." autoFocus fullWidth 
+                    value={name} onChange={e => setName(e.target.value)} 
+                    onKeyDown={keyPress} InputProps={{
+                    endAdornment: (
+                        <InputAdornment position="end">
+                            <IconButton disabled={!name} onClick={addTask}>
+                                <SendIcon color="primary" />
+                            </IconButton>
+                        </InputAdornment>
+                    ),
+                }}
+            />
+        </Drawer>
+
+        </>
     )
 }
 
