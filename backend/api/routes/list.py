@@ -1,5 +1,5 @@
 from flask import Blueprint, request, jsonify
-from models import List, ListSchema, db, User, Task, TaskSchema
+from api.models import List, ListSchema, db, User, Task, TaskSchema
 from flask_jwt_extended import (jwt_required, get_jwt_identity)
 
 list_endpoint = Blueprint('list', __name__)

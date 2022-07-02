@@ -2,12 +2,12 @@ from flask import Flask
 from flask_migrate import Migrate
 from flasgger import Swagger
 from flask_jwt_extended import JWTManager
-import config
-from models import db, ma
-from routes.auth import auth_endpoint
-from routes.task import task_endpoint
-from routes.project import project_endpoint
-from routes.list import list_endpoint
+import api.config as config
+from api.models import db, ma
+from api.routes.auth import auth_endpoint
+from api.routes.task import task_endpoint
+from api.routes.project import project_endpoint
+from api.routes.list import list_endpoint
 from flask_cors import CORS
 
 swagger_template = {
