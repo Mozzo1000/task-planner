@@ -70,6 +70,7 @@ class Task(db.Model):
     description = db.Column(db.String, nullable=True)
     due_date = db.Column(db.DateTime, nullable=True)
     status = db.Column(db.String, nullable=False, default="Not started")
+    priority = db.Column(db.Integer, default=1)
     created_at = db.Column(db.DateTime, server_default=db.func.now())
 
     list_id = db.Column(db.Integer, db.ForeignKey('lists.id'))
