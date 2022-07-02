@@ -153,107 +153,93 @@ function Task(props) {
 
     return (
         <Container>
-            {content ? (
-            <Grid container spacing={3} direction="row" justifyContent="flex-start" alignItems="center">
-                <Grid container item direction="row" justifyContent="space-between" alignItems="center">
-                    <Grid item>
-                        <Grid container direction="row" alignItems="center">
-                            <Grid item>
-                                {!openEditName ? (
-                                    <>
-                                    <h1>{name}
-                                    <Breadcrumbs>
-                                        {content.list && (
-                                            <Typography variant="subtitle1">{content.list.name}</Typography>
-                                        )}
-                                        <Typography variant="subtitle1">{name}</Typography>
-                                    </Breadcrumbs>
-                                    </h1>
-                                    </>
-                                ): (
-                                    <>
-                                   <TextField onChange={e => (setName(e.target.value), setSaveButton(e.target.value))} value={name }/>
-                                    
-                                    </>
-                                )}
-                            </Grid>
-                            <Grid item>
-                                <IconButton>
-                                    <IconButton onClick={handleClickMenu} ><MoreHorizIcon /></IconButton>
-                                </IconButton>
-                                <Menu anchorEl={menuAnchorEl} open={openMenu} onClose={handleCloseMenu}>
-                                    <MenuItem onClick={setOpenEditName}>
-                                        <ListItemIcon><EditIcon/></ListItemIcon>
-                                        <ListItemText>Rename</ListItemText>
-                                    </MenuItem>
-                                    <MenuItem onClick={() => createICS()}>
-                                        <ListItemIcon><DownloadIcon/></ListItemIcon>
-                                        <ListItemText>Download ICS</ListItemText>
-                                    </MenuItem>
-                                </Menu>
-                            </Grid>
-                        </Grid>
-                    </Grid>
-                    <Grid item>
-                        <Button variant="contained" onClick={save} disabled={!saveButton}>Save</Button>
-                    </Grid>
+            <Grid container spacing={3} direction="row" alignItems="center" justifyContent="space-between">
+                <Grid item>
+                    {!openEditName ? (
+                        <>
+                        <h1>{name}
+                        <Breadcrumbs>
+                            {content.list && (
+                                <Typography variant="subtitle1">{content.list.name}</Typography>
+                            )}
+                            <Typography variant="subtitle1">{name}</Typography>
+                        </Breadcrumbs>
+                        </h1>
+                        </>
+                    ): (
+                        <>
+                        <TextField onChange={e => (setName(e.target.value), setSaveButton(e.target.value))} value={name }/>
+                        
+                        </>
+                    )}
                 </Grid>
                 <Grid item>
-                    <Table size="small">
-                        <TableRow>
-                            <TableCell sx={{border: 0}}>Status</TableCell>
-                            <TableCell sx={{border: 0}}>
-                                <FormControl variant="standard">
-                                    <Select disableUnderline inputProps={{
-                                            name: "badge",
-                                            id: "badge-simple"
-                                        }} 
-                                        value={status} onChange={e => (setStatus(e.target.value), setSaveButton(e.target.value))} renderValue={renderChip}>
-                                        <Chip color="primary" value="Not started" label="Not started"/>
-                                        <Chip color="secondary" value="In progress" label="In progress"/>
-                                        <Chip color="success" value="Done" label="Done"/>
-                                    </Select>
-                                </FormControl>
-                            </TableCell>
-                        </TableRow>
-                        <TableRow>
-                            <TableCell sx={{border: 0}}>Due date</TableCell>
-                            <TableCell sx={{border: 0}}>
-                                <DateTimePicker
-                                    value={value}
-                                    clearable
-                                    InputProps={{ startAdornment: <AccessTimeIcon />, disableUnderline: false }}
-                                    onChange={(newValue) => {
-                                        setValue(newValue);
-                                        setSaveButton(newValue);
-                                    }}
-                                    label="Due date"
-                                    ampm={false}
-                                    renderInput={(params) => <TextField variant="standard" {...params}>{value}</TextField>}
-                                />
-                            </TableCell>
-                        </TableRow>
-
-                    </Table>
-                </Grid>
-                <Grid item xs={12}>
-                    <Typography variant="h5">{<FormatAlignLeftIcon />} Description</Typography>
-                    {description && !openEditDesc ? (
-                        <Typography onDoubleClick={handleOpenEditDesc}><ReactMarkdown>{description}</ReactMarkdown></Typography>
-                    ): !openEditDesc &&(
-                        <Typography sx={{fontStyle: "italic", justifyContent: "center"}}>No description available yet. <Link onClick={handleOpenEditDesc}>Edit</Link></Typography>
-                    )}
-                    {openEditDesc && 
-                        <>
-                            <TextField onChange={e => (setDescription(e.target.value), setSaveButton(e.target.value))} multiline={true} fullWidth value={description}></TextField>
-                            <Button onClick={closeAndClearEditDesc}>Cancel</Button>
-                        </>
-                    }
+                    <IconButton>
+                        <IconButton onClick={handleClickMenu} ><MoreHorizIcon /></IconButton>
+                    </IconButton>
+                    <Menu anchorEl={menuAnchorEl} open={openMenu} onClose={handleCloseMenu}>
+                        <MenuItem onClick={setOpenEditName}>
+                            <ListItemIcon><EditIcon/></ListItemIcon>
+                            <ListItemText>Rename</ListItemText>
+                        </MenuItem>
+                        <MenuItem onClick={() => createICS()}>
+                            <ListItemIcon><DownloadIcon/></ListItemIcon>
+                            <ListItemText>Download ICS</ListItemText>
+                        </MenuItem>
+                    </Menu>
+                    <Button variant="contained" onClick={save} disabled={!saveButton}>Save</Button>
                 </Grid>
             </Grid>
-            ) : (
-                <LinearProgress />
+                
+            <Table size="small">
+                <TableRow>
+                    <TableCell sx={{border: 0}}>Status</TableCell>
+                    <TableCell sx={{border: 0}}>
+                        <FormControl variant="standard">
+                            <Select disableUnderline inputProps={{
+                                    name: "badge",
+                                    id: "badge-simple"
+                                }} 
+                                value={status} onChange={e => (setStatus(e.target.value), setSaveButton(e.target.value))} renderValue={renderChip}>
+                                <Chip color="primary" value="Not started" label="Not started"/>
+                                <Chip color="secondary" value="In progress" label="In progress"/>
+                                <Chip color="success" value="Done" label="Done"/>
+                            </Select>
+                        </FormControl>
+                    </TableCell>
+                </TableRow>
+                <TableRow>
+                    <TableCell sx={{border: 0}}>Due date</TableCell>
+                    <TableCell sx={{border: 0}}>
+                        <DateTimePicker
+                            value={value}
+                            clearable
+                            InputProps={{ startAdornment: <AccessTimeIcon />, disableUnderline: false }}
+                            onChange={(newValue) => {
+                                setValue(newValue);
+                                setSaveButton(newValue);
+                            }}
+                            label="Due date"
+                            ampm={false}
+                            renderInput={(params) => <TextField variant="standard" {...params}>{value}</TextField>}
+                        />
+                    </TableCell>
+                </TableRow>
+            </Table>
+            <br />
+            
+            <Typography variant="h5">{<FormatAlignLeftIcon />} Description</Typography>
+            {description && !openEditDesc ? (
+                <Typography onDoubleClick={handleOpenEditDesc}><ReactMarkdown>{description}</ReactMarkdown></Typography>
+            ): !openEditDesc &&(
+                <Typography sx={{fontStyle: "italic", justifyContent: "center"}}>No description available yet. <Link onClick={handleOpenEditDesc}>Edit</Link></Typography>
             )}
+            {openEditDesc && 
+                <>
+                    <TextField onChange={e => (setDescription(e.target.value), setSaveButton(e.target.value))} multiline={true} fullWidth value={description}></TextField>
+                    <Button onClick={closeAndClearEditDesc}>Cancel</Button>
+                </>
+            }
             <Snackbar open={openStatusMessage} autoHideDuration={6000} onClose={handleCloseMessage} message={statusMessage} />
         </Container>
     )
