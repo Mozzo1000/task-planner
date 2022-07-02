@@ -227,8 +227,7 @@ function Task(props) {
                 </TableRow>
             </Table>
             <br />
-            
-            <Typography variant="h5">{<FormatAlignLeftIcon />} Description</Typography>
+            <hr />
             {description && !openEditDesc ? (
                 <Typography onDoubleClick={handleOpenEditDesc}><ReactMarkdown>{description}</ReactMarkdown></Typography>
             ): !openEditDesc &&(
