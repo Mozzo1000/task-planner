@@ -193,7 +193,7 @@ function Task(props) {
                 
             <Table size="small">
                 <TableRow>
-                    <TableCell sx={{border: 0}}>Status</TableCell>
+                    <TableCell sx={{padding: 0, border: 0}}>Status</TableCell>
                     <TableCell sx={{border: 0}}>
                         <FormControl variant="standard">
                             <Select disableUnderline inputProps={{
@@ -209,7 +209,7 @@ function Task(props) {
                     </TableCell>
                 </TableRow>
                 <TableRow>
-                    <TableCell sx={{border: 0}}>Due date</TableCell>
+                    <TableCell sx={{padding: 0, border: 0}}>Due date</TableCell>
                     <TableCell sx={{border: 0}}>
                         <DateTimePicker
                             value={value}
