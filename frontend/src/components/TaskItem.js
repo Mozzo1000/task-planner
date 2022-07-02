@@ -15,6 +15,7 @@ import IconButton from '@mui/material/IconButton';
 import Button from '@mui/material/Button';
 import Grid from '@mui/material/Grid';
 import OpenInNewIcon from '@mui/icons-material/OpenInNew';
+import Container from '@mui/material/Container';
 
 function TaskItem(props) {
     const [checked, setChecked] = useState(false);
@@ -76,23 +77,26 @@ function TaskItem(props) {
             </ListItemIcon>
         </ListItem>
         <Drawer anchor="right" open={openDrawer} onClose={handleCloseDrawer}>
-            <Grid container spacing={3} direction="row" justifyContent="space-between" alignItems="center">
-                <Grid item>
-                    {/* ADD CLOSE BUTTON */}
-                    <IconButton onClick={handleCloseDrawer}>
-                        <CloseIcon />
-                    </IconButton>
-                    {/* ADD OPEN IN SEPARATE WINDOW */}
+            <Container>
+                <br/>
+                <Grid container spacing={3} direction="row" justifyContent="space-between" alignItems="center">
+                    <Grid item>
+                        {/* ADD CLOSE BUTTON */}
+                        <IconButton onClick={handleCloseDrawer}>
+                            <CloseIcon />
+                        </IconButton>
+                        {/* ADD OPEN IN SEPARATE WINDOW */}
+                    </Grid>
+                    <Grid item>
+                        <Button variant="contained" component={Link} to={"/tasks/" + props.id} startIcon={<OpenInNewIcon />}>
+                            Open
+                        </Button>
+                    </Grid>
+                    <Grid item xs={12}>
+                        <Task id={props.id}/>
+                    </Grid>
                 </Grid>
-                <Grid item>
-                    <Button variant="contained" component={Link} to={"/tasks/" + props.id} startIcon={<OpenInNewIcon />}>
-                        Open
-                    </Button>
-                </Grid>
-                <Grid item xs={12}>
-                    <Task id={props.id}/>
-                </Grid>
-            </Grid>
+            </Container>
         </Drawer>
         <Snackbar open={openStatusMessage} autoHideDuration={6000} onClose={handleCloseMessage} message={statusMessage} />
         </>
