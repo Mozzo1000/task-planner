@@ -26,6 +26,9 @@ import DownloadIcon from '@mui/icons-material/Download';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
 import ReactMarkdown from 'react-markdown';
+import Table from '@mui/material/Table';
+import TableCell from '@mui/material/TableCell';
+import TableRow from '@mui/material/TableRow';
 
 function Task(props) {
     const [content, setContent] = useState({});
@@ -157,9 +160,21 @@ function Task(props) {
                         <Grid container direction="row" alignItems="center">
                             <Grid item>
                                 {!openEditName ? (
-                                    <h1>{name}</h1>
+                                    <>
+                                    <h1>{name}
+                                    <Breadcrumbs>
+                                        {content.list && (
+                                            <Typography variant="subtitle1">{content.list.name}</Typography>
+                                        )}
+                                        <Typography variant="subtitle1">{name}</Typography>
+                                    </Breadcrumbs>
+                                    </h1>
+                                    </>
                                 ): (
-                                   <TextField onChange={e => (setName(e.target.value), setSaveButton(e.target.value))} value={name}/> 
+                                    <>
+                                   <TextField onChange={e => (setName(e.target.value), setSaveButton(e.target.value))} value={name }/>
+                                    
+                                    </>
                                 )}
                             </Grid>
                             <Grid item>
@@ -183,40 +198,43 @@ function Task(props) {
                         <Button variant="contained" onClick={save} disabled={!saveButton}>Save</Button>
                     </Grid>
                 </Grid>
-                <Grid item md={3}>
-                    <Breadcrumbs>
-                        {content.list && (
-                            <Typography variant="subtitle1">{content.list.name}</Typography>
-                        )}
-                        <Typography variant="subtitle1">{name}</Typography>
-                    </Breadcrumbs>
-                </Grid>
-                <Grid item md={2}>
-                    <DateTimePicker
-                        value={value}
-                        clearable
-                        InputProps={{ startAdornment: <AccessTimeIcon />, disableUnderline: false }}
-                        onChange={(newValue) => {
-                            setValue(newValue);
-                            setSaveButton(newValue);
-                        }}
-                        label="Due date"
-                        ampm={false}
-                        renderInput={(params) => <TextField variant="standard" {...params}>{value}</TextField>}
-                    />
-                </Grid>
-                <Grid item md={2}>
-                    <FormControl variant="standard">
-                        <Select disableUnderline inputProps={{
-                                name: "badge",
-                                id: "badge-simple"
-                            }} 
-                            value={status} onChange={e => (setStatus(e.target.value), setSaveButton(e.target.value))} renderValue={renderChip}>
-                            <Chip color="primary" value="Not started" label="Not started"/>
-                            <Chip color="secondary" value="In progress" label="In progress"/>
-                            <Chip color="success" value="Done" label="Done"/>
-                        </Select>
-                    </FormControl>
+                <Grid item>
+                    <Table size="small">
+                        <TableRow>
+                            <TableCell sx={{border: 0}}>Status</TableCell>
+                            <TableCell sx={{border: 0}}>
+                                <FormControl variant="standard">
+                                    <Select disableUnderline inputProps={{
+                                            name: "badge",
+                                            id: "badge-simple"
+                                        }} 
+                                        value={status} onChange={e => (setStatus(e.target.value), setSaveButton(e.target.value))} renderValue={renderChip}>
+                                        <Chip color="primary" value="Not started" label="Not started"/>
+                                        <Chip color="secondary" value="In progress" label="In progress"/>
+                                        <Chip color="success" value="Done" label="Done"/>
+                                    </Select>
+                                </FormControl>
+                            </TableCell>
+                        </TableRow>
+                        <TableRow>
+                            <TableCell sx={{border: 0}}>Due date</TableCell>
+                            <TableCell sx={{border: 0}}>
+                                <DateTimePicker
+                                    value={value}
+                                    clearable
+                                    InputProps={{ startAdornment: <AccessTimeIcon />, disableUnderline: false }}
+                                    onChange={(newValue) => {
+                                        setValue(newValue);
+                                        setSaveButton(newValue);
+                                    }}
+                                    label="Due date"
+                                    ampm={false}
+                                    renderInput={(params) => <TextField variant="standard" {...params}>{value}</TextField>}
+                                />
+                            </TableCell>
+                        </TableRow>
+
+                    </Table>
                 </Grid>
                 <Grid item xs={12}>
                     <Typography variant="h5">{<FormatAlignLeftIcon />} Description</Typography>
