@@ -96,8 +96,8 @@ function AddTask(props) {
                     onKeyDown={keyPress} InputProps={{
                     endAdornment: (
                         <InputAdornment position="end">
-                            <IconButton disabled={!name} onClick={addTask}>
-                                <SendIcon color="primary" />
+                            <IconButton disabled={!name} onClick={addTask} color="primary">
+                                <SendIcon />
                             </IconButton>
                         </InputAdornment>
                     ),
