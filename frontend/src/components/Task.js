@@ -29,6 +29,8 @@ import ReactMarkdown from 'react-markdown';
 import Table from '@mui/material/Table';
 import TableCell from '@mui/material/TableCell';
 import TableRow from '@mui/material/TableRow';
+import Stack from '@mui/material/Stack';
+import CelebrationIcon from '@mui/icons-material/Celebration';
 
 function Task(props) {
     const [content, setContent] = useState({});
@@ -190,10 +192,14 @@ function Task(props) {
                     <Button variant="contained" onClick={save} disabled={!saveButton}>Save</Button>
                 </Grid>
             </Grid>
-                
             <Table size="small">
                 <TableRow>
-                    <TableCell sx={{padding: 0, border: 0}}>Status</TableCell>
+                    <TableCell variant="footer" sx={{fontSize: 14, padding: 0, border: 0}}>
+                        <Stack direction="row" alignItems="center" gap={1}>
+                            <CelebrationIcon fontSize="small"/>
+                            Status
+                        </Stack>
+                    </TableCell>
                     <TableCell sx={{border: 0}}>
                         <FormControl variant="standard">
                             <Select disableUnderline inputProps={{
@@ -209,7 +215,12 @@ function Task(props) {
                     </TableCell>
                 </TableRow>
                 <TableRow>
-                    <TableCell sx={{padding: 0, border: 0}}>Due date</TableCell>
+                    <TableCell variant="footer" sx={{fontSize: 14, padding: 0, border: 0}}>
+                        <Stack direction="row" alignItems="center" gap={1}>
+                            <AccessTimeIcon fontSize="small"/>
+                            Due date
+                        </Stack>
+                        </TableCell>
                     <TableCell sx={{border: 0}}>
                         <DateTimePicker
                             value={value}
