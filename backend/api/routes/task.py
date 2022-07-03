@@ -1,6 +1,7 @@
 from flask import Blueprint, request, jsonify
 from api.models import Task, TaskSchema, db, User
 from flask_jwt_extended import (jwt_required, get_jwt_identity)
+from datetime import datetime
 
 task_endpoint = Blueprint('task', __name__)
 
@@ -37,6 +38,22 @@ def get_all_tasks():
     else:
         tasks = Task.query.filter_by(owner_id=User.find_by_email(get_jwt_identity()).id).order_by(Task.created_at.desc()).all()
     return jsonify(task_schema.dump(tasks))
+
+@task_endpoint.route("/v1/tasks/stats")
+@jwt_required()
+def get_task_stats():
+    from_date = request.args.get("from", default="1900-01-01")
+    to_date = request.args.get("to", default=datetime.now())
+    if request.args:
+        tasks_completed = Task.query.filter(Task.owner_id==User.find_by_email(get_jwt_identity()).id, Task.status=="Done", Task.created_at.between(from_date, to_date)).count()
+        tasks_not_done = Task.query.filter(Task.owner_id==User.find_by_email(get_jwt_identity()).id, Task.status!="Done", Task.created_at.between(from_date, to_date)).count()
+    else:
+        tasks_completed = Task.query.filter(Task.owner_id==User.find_by_email(get_jwt_identity()).id, Task.status=="Done").count()
+        tasks_not_done = Task.query.filter(Task.owner_id==User.find_by_email(get_jwt_identity()).id, Task.status!="Done").count()
+    return jsonify({
+            "completed": tasks_completed,
+            "not_done": tasks_not_done
+        }), 201
 
 @task_endpoint.route("/v1/tasks/<id>")
 @jwt_required()
