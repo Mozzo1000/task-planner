@@ -31,6 +31,7 @@ import TableCell from '@mui/material/TableCell';
 import TableRow from '@mui/material/TableRow';
 import Stack from '@mui/material/Stack';
 import CelebrationIcon from '@mui/icons-material/Celebration';
+import PriorityHighIcon from '@mui/icons-material/PriorityHigh';
 
 function Task(props) {
     const [content, setContent] = useState({});
@@ -43,6 +44,7 @@ function Task(props) {
     const [openEditName, setOpenEditName] = useState(false);
     const [openStatusMessage, setOpenStatusMessage] = useState(false);
     const [statusMessage, setStatusMessage] = useState("");
+    const [priority, setPriority] = useState("");
 
     const [menuAnchorEl, setMenuAnchorEl] = useState(null);
     const openMenu = Boolean(menuAnchorEl);
@@ -68,6 +70,25 @@ function Task(props) {
             color = "success"
         }
         return <Chip color={color} label={status} />;
+    };
+
+    const renderChipPriority = value => {
+        let color = "low";
+        let label = "Low"
+        if (value === "1") {
+            color = "low"
+            label = "Low"
+        }else if (value === "2") {
+            color = "medium"
+            label = "Medium"
+        } else if (value === "3") {
+            color = "high"
+            label = "High"
+        } else if (value === "4") {
+            color = "urgent"
+            label = "Urgent"
+        }
+        return <Chip color={color} label={label} />;
     };
 
     const handleClickMenu = (event) => {
@@ -105,6 +126,9 @@ function Task(props) {
             modifiedData["name"] = name;
             setOpenEditName(false);
         }
+        if (content.priority != priority) {
+            modifiedData["priority"] = priority
+        }
 
         TaskService.editTask(props.id, modifiedData).then(
             response => {
@@ -129,11 +153,13 @@ function Task(props) {
     useEffect(() => {
         TaskService.getTask(props.id).then(
             response => {
+                console.log(response.data);
                 setContent(response.data);
                 setStatus(response.data.status);
                 setValue(response.data.due_date);
                 setDescription(response.data.description);
                 setName(response.data.name);
+                setPriority(response.data.priority.toString());
             },
             error => {
                 const resMessage = 
@@ -234,6 +260,28 @@ function Task(props) {
                             ampm={false}
                             renderInput={(params) => <TextField variant="standard" {...params}>{value}</TextField>}
                         />
+                    </TableCell>
+                </TableRow>
+                <TableRow>
+                    <TableCell variant="footer" sx={{fontSize: 14, padding: 0, border: 0}}>
+                        <Stack direction="row" alignItems="center" gap={1}>
+                            <PriorityHighIcon fontSize="small"/>
+                            Priority
+                        </Stack>
+                    </TableCell>
+                    <TableCell sx={{border: 0}}>
+                        <FormControl variant="standard">
+                            <Select disableUnderline inputProps={{
+                                    name: "badge-priority",
+                                    id: "badge-simple-priority"
+                                }} 
+                                value={priority} onChange={e => (setPriority(e.target.value), setSaveButton(e.target.value))} renderValue={renderChipPriority}>
+                                <Chip color="urgent" value="4" label="Urgent"/>
+                                <Chip color="high" value="3" label="High"/>
+                                <Chip color="medium" value="2" label="Medium"/>
+                                <Chip color="low" value="1" label="Low"/>
+                            </Select>
+                        </FormControl>
                     </TableCell>
                 </TableRow>
             </Table>
