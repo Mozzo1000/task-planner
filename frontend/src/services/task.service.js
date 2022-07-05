@@ -4,6 +4,10 @@ import authHeader from "./auth-header";
 const BASE_URL = "http://localhost:5000"
 const API_URL = BASE_URL + "/v1/";
 
+const getStats = (filter) => {
+  return axios({method: 'get', url: API_URL + "tasks/stats", headers: authHeader(), params: filter}) 
+}
+
 const getAllTasks = (filter) => {
     if (!filter) {
       return axios.get(API_URL + "tasks", { headers: authHeader() });
@@ -34,6 +38,7 @@ const exportedObject = {
     getTask,
     addTask,
     editTask,
+    getStats,
 };
 
 export default exportedObject;
