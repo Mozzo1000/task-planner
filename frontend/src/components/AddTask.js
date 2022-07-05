@@ -85,7 +85,7 @@ function AddTask(props) {
             </Grid>
         </Grid>
         <Box sx={{display: {xs: "flex", sm: "none"} }}>
-            <Fab color="primary" sx={{position: "absolute", bottom: 32, right: 32}} onClick={handleClickOpen}>
+            <Fab color="primary" sx={{position: "fixed", bottom: 32, right: 32}} onClick={handleClickOpen}>
                 <AddIcon />
             </Fab>
         </Box>
