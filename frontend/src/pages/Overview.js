@@ -16,6 +16,7 @@ import TaskService from "../services/task.service";
 import LinearProgress from '@mui/material/LinearProgress';
 import Snackbar from '@mui/material/Snackbar';
 import TaskItem from '../components/TaskItem';
+import TodoCard from '../components/TodoCard';
 
 function Overview() {
     const [tasks, setTasks] = useState();
@@ -83,6 +84,11 @@ function Overview() {
                             <LinearProgress />
                         )}
                     </Card>
+                </Grid>
+                <Grid container item direction="row">
+                    <Grid item xs={4}>
+                        <TodoCard />
+                    </Grid>
                 </Grid>
             </Grid>
             <Snackbar open={openStatusMessage} autoHideDuration={6000} onClose={handleCloseMessage} message={statusMessage} />
