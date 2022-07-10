@@ -118,7 +118,7 @@ function TodoCard() {
                 </Grid>
                 <Grid item>
                     {content &&
-                        <CircularProgressWithLabel size={80} value={content.completed / (content.completed + content.not_done) * 100} sx={{borderRadius: "100%", boxShadow: "inset 0 0 0px 6.5px gray", backgroundColor: "transparent"}}/>
+                        <CircularProgressWithLabel size={80} value={~~(content.completed / (content.completed + content.not_done) * 100)} sx={{borderRadius: "100%", boxShadow: "inset 0 0 0px 6.5px gray", backgroundColor: "transparent"}}/>
                     }
                 </Grid>
                 <Grid item xs={12}>
