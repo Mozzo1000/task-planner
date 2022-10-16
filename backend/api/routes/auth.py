@@ -2,26 +2,30 @@ from flask import Blueprint, request, jsonify, abort
 from flask_jwt_extended import (create_access_token, create_refresh_token,
                                 jwt_required, get_jwt_identity, get_jwt)
 from api.models import User, RevokedTokenModel
+import os
 
 auth_endpoint = Blueprint('auth', __name__)
 
 @auth_endpoint.route("/v1/auth/register", methods=["POST"])
 def register():
-    if not "email" or not "password" or not "name" in request.json:
-        abort(422)
-    if User.find_by_email(request.json["email"]):
-        return jsonify({'message': 'Email {} is already in use'.format(request.json["email"])}), 409
-    
-    new_user = User(email=request.json["email"], password=User.generate_hash(request.json["password"]), name=request.json["name"])
+    if os.environ.get("ALLOW_REGISTRATION").lower() == "true":
+        if not "email" or not "password" or not "name" in request.json:
+            abort(422)
+        if User.find_by_email(request.json["email"]):
+            return jsonify({'message': 'Email {} is already in use'.format(request.json["email"])}), 409
+        
+        new_user = User(email=request.json["email"], password=User.generate_hash(request.json["password"]), name=request.json["name"])
 
-    try:
-        new_user.save_to_db()
-        access_token = create_access_token(identity=request.json["email"])
-        refresh_token = create_refresh_token(identity=request.json["email"])
-        return jsonify({'message': 'Account with email {} was created'.format(request.json["email"]), 'access_token': access_token, 'refresh_token': refresh_token}), 201
+        try:
+            new_user.save_to_db()
+            access_token = create_access_token(identity=request.json["email"])
+            refresh_token = create_refresh_token(identity=request.json["email"])
+            return jsonify({'message': 'Account with email {} was created'.format(request.json["email"]), 'access_token': access_token, 'refresh_token': refresh_token}), 201
 
-    except:
-        return jsonify({'message': 'Something went wrong'}), 500
+        except:
+            return jsonify({'message': 'Something went wrong'}), 500
+    else:
+        return jsonify({'message': 'Route disabled'}), 501
 
 @auth_endpoint.route("/v1/auth/login", methods=["POST"])
 def login():
