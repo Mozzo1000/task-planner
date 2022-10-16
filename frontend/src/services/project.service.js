@@ -1,7 +1,7 @@
 import axios from "axios";
 import authHeader from "./auth-header";
 
-const BASE_URL = "http://localhost:5000"
+const BASE_URL = process.env.REACT_APP_TASK_API_URL
 const API_URL = BASE_URL + "/v1/";
 
 const getAll = (filter) => {

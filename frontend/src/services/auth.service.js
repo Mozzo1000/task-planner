@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const BASE_URL = "http://localhost:5000"
+const BASE_URL = process.env.REACT_APP_TASK_API_URL
 const API_URL = BASE_URL + "/v1/auth/";
 
 const register = (email, name, password) => {
