@@ -86,7 +86,7 @@ function Overview() {
                     </Card>
                 </Grid>
                 <Grid container item direction="row">
-                    <Grid item xs={4}>
+                    <Grid item sm={12} lg={4}>
                         <TodoCard />
                     </Grid>
                 </Grid>
