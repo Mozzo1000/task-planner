@@ -29,7 +29,7 @@ const StyledBadge = styled(BadgeUnstyled)`
         min-width: 12px;
         height: 20px;
         padding: 0 6px;
-        color: #c1c6c9;
+        color: #1d4dbc;
         font-weight: bold;
         font-size: 15px;
         line-height: 20px;
