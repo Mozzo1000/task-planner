@@ -19,6 +19,8 @@ def edit_task(id):
         task.due_date = request.json["due_date"]
     if "priority" in request.json:
         task.priority = request.json["priority"]
+    if "list" in request.json:
+        task.list_id = request.json["list"]
 
     task.save_to_db()
     return jsonify({'message': f'Task saved successfully'}), 200
