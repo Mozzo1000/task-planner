@@ -32,6 +32,7 @@ import TableRow from '@mui/material/TableRow';
 import Stack from '@mui/material/Stack';
 import CelebrationIcon from '@mui/icons-material/Celebration';
 import PriorityHighIcon from '@mui/icons-material/PriorityHigh';
+import SelectList from './SelectList';
 
 function Task(props) {
     const [content, setContent] = useState({});
@@ -45,6 +46,7 @@ function Task(props) {
     const [openStatusMessage, setOpenStatusMessage] = useState(false);
     const [statusMessage, setStatusMessage] = useState("");
     const [priority, setPriority] = useState("");
+    const [list, setList] = useState("");
 
     const [menuAnchorEl, setMenuAnchorEl] = useState(null);
     const openMenu = Boolean(menuAnchorEl);
@@ -129,6 +131,9 @@ function Task(props) {
         if (content.priority != priority) {
             modifiedData["priority"] = priority
         }
+        if ((content.list && content.list.id != list.id) | (!content.list && list.id)) {
+            modifiedData["list"] = list.id
+        }
 
         TaskService.editTask(props.id, modifiedData).then(
             response => {
@@ -160,6 +165,7 @@ function Task(props) {
                 setDescription(response.data.description);
                 setName(response.data.name);
                 setPriority(response.data.priority.toString());
+                setList(response.data.list)
             },
             error => {
                 const resMessage = 
@@ -187,8 +193,8 @@ function Task(props) {
                         <>
                         <h1>{name}
                         <Breadcrumbs>
-                            {content.list && (
-                                <Typography variant="subtitle1">{content.list.name}</Typography>
+                            {list && (
+                                <Typography variant="subtitle1">{list.name}</Typography>
                             )}
                             <Typography variant="subtitle1">{name}</Typography>
                         </Breadcrumbs>
@@ -210,6 +216,7 @@ function Task(props) {
                             <ListItemIcon><EditIcon/></ListItemIcon>
                             <ListItemText>Rename</ListItemText>
                         </MenuItem>
+                        <SelectList setCallbackList={e => (setList(e), setSaveButton(true), handleCloseMenu())} />
                         <MenuItem onClick={() => createICS()}>
                             <ListItemIcon><DownloadIcon/></ListItemIcon>
                             <ListItemText>Download ICS</ListItemText>
