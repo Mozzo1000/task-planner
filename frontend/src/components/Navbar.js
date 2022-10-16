@@ -22,6 +22,7 @@ import LoginIcon from '@mui/icons-material/Login';
 import ScheduleIcon from '@mui/icons-material/Schedule';
 import CalendarTodayIcon from '@mui/icons-material/CalendarToday';
 import LayersIcon from '@mui/icons-material/Layers';
+import ProjectList from './ProjectList';
 
 function Navbar() {
     let navigate = useNavigate();
@@ -82,7 +83,8 @@ function Navbar() {
                         </ListItem>
                     ))}
                 </List>
-                
+                <Divider />
+                <ProjectList />
             </Box>
         </>
     );
