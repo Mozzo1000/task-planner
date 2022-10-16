@@ -73,7 +73,11 @@ function TaskItem(props) {
                 <ListItemText primary={props.name} />
             </ListItemButton>
             <ListItemIcon>
+            {props.list &&
+                <Chip color="secondary" label={props.list.name} sx={{marginRight: "10px"}}/>
+            }
             <Chip label={props.status}/>
+            
             </ListItemIcon>
         </ListItem>
         <Drawer anchor="right" open={openDrawer} onClose={handleCloseDrawer}>

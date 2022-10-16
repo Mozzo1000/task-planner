@@ -77,7 +77,7 @@ function Overview() {
                         {tasks ? (
                         <List>
                             {tasks.map((task, index) => (
-                               <TaskItem id={task.id} name={task.name} status={task.status} onSuccess={onTaskAdded} />
+                               <TaskItem id={task.id} name={task.name} status={task.status} list={task.list} onSuccess={onTaskAdded} />
                             ))}
                         </List>
                         ) : (
