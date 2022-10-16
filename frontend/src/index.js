@@ -1,11 +1,14 @@
 import React from 'react';
-import ReactDOM from 'react-dom';
+import { createRoot } from 'react-dom/client';
 import './index.css';
 import App from './App';
 import * as serviceWorkerRegistration from './serviceWorkerRegistration';
-import AdapterDateFns from '@mui/lab/AdapterDateFns';
-import LocalizationProvider from '@mui/lab/LocalizationProvider';
+import { LocalizationProvider } from '@mui/x-date-pickers';
+import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
+
+const container = document.getElementById('root')
+const root = createRoot(container)
 
 const { palette } = createTheme();
 const { augmentColor } = palette;
@@ -20,14 +23,13 @@ const theme = createTheme({
 });
 
 
-ReactDOM.render(
+root.render(
   <React.StrictMode>
      <LocalizationProvider dateAdapter={AdapterDateFns}>
        <ThemeProvider theme={theme}>
         <App />
        </ThemeProvider>
      </LocalizationProvider>
-  </React.StrictMode>,
-  document.getElementById('root')
+  </React.StrictMode>
 );
 serviceWorkerRegistration.register();
