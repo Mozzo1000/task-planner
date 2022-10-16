@@ -59,7 +59,7 @@ function Navbar() {
     const handleSettingsItemClick = (e) => {
         if(e === "logout") {
             AuthService.logout();
-            navigate("/");
+            navigate("/login");
         }
         handleCloseUserMenu();
     };
@@ -91,6 +91,7 @@ function Navbar() {
 
     return (
         <>
+        {currentUser &&
         <Box sx={{display: 'flex'}}>
             <AppBar position="fixed" sx={{width: { md: `calc(100% - ${240}px)` }, zIndex: 2, backgroundColor: 'white', color: 'black'}}>
                 <Container maxWidth="x1">
@@ -167,6 +168,7 @@ function Navbar() {
                 {drawer}
             </Drawer>
         </Box>
+        }
         </>
     )
 }
