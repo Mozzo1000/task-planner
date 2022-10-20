@@ -9,7 +9,7 @@ import Link from '@mui/material/Link';
 import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
 import AccessTimeIcon from '@mui/icons-material/AccessTime';
-import DateTimePicker from '@mui/lab/MobileDateTimePicker';
+import { MobileDateTimePicker } from '@mui/x-date-pickers';
 import Chip from '@mui/material/Chip';
 import Select from '@mui/material/Select';
 import FormControl from '@mui/material/FormControl';
@@ -131,8 +131,11 @@ function Task(props) {
         if (content.priority != priority) {
             modifiedData["priority"] = priority
         }
-        if ((content.list && content.list.id != list.id) | (!content.list && list.id)) {
-            modifiedData["list"] = list.id
+
+        if (content.list) {
+            if (content.list.id != list.id) {
+                modifiedData["list"] = list.id
+            }
         }
 
         TaskService.editTask(props.id, modifiedData).then(
@@ -255,7 +258,7 @@ function Task(props) {
                         </Stack>
                         </TableCell>
                     <TableCell sx={{border: 0}}>
-                        <DateTimePicker
+                        <MobileDateTimePicker
                             value={value}
                             clearable
                             InputProps={{ startAdornment: <AccessTimeIcon />, disableUnderline: false }}
