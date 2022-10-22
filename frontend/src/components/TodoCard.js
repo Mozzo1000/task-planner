@@ -47,14 +47,14 @@ function TodoCard() {
   useEffect(() => {
     var data = {};
     var today = new Date(); // get current date
-    if (filter == "this week") {
+    if (filter === "this week") {
       var firstDay = startOfWeek(today, { weekStartsOn: 2 });
       var lastDay = endOfWeek(today, { weekStartsOn: 1 });
       data = {
         from: firstDay.toISOString().split("T")[0],
         to: lastDay.toISOString().split("T")[0],
       };
-    } else if (filter == "last week") {
+    } else if (filter === "last week") {
       var lastWeek = subWeeks(today, 1);
       var firstDay = startOfWeek(lastWeek, { weekStartsOn: 2 });
       var lastDay = endOfWeek(lastWeek, { weekStartsOn: 1 });
@@ -62,11 +62,11 @@ function TodoCard() {
         from: firstDay.toISOString().split("T")[0],
         to: lastDay.toISOString().split("T")[0],
       };
-    } else if (filter == "last six months") {
+    } else if (filter === "last six months") {
       var lastSixMonths = subMonths(today, 6);
       var firstDay = startOfWeek(lastSixMonths, { weekStartsOn: 2 });
       data = { from: firstDay.toISOString().split("T")[0] };
-    } else if (filter == "this year") {
+    } else if (filter === "this year") {
       var startYear = startOfYear(today);
       var endYear = endOfYear(today);
       data = {

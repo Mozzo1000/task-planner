@@ -1,10 +1,8 @@
 import React, { useState, useEffect } from "react";
-import { useParams } from "react-router-dom";
 import Container from "@mui/material/Container";
 import Grid from "@mui/material/Grid";
 import Breadcrumbs from "@mui/material/Breadcrumbs";
 import Typography from "@mui/material/Typography";
-import FormatAlignLeftIcon from "@mui/icons-material/FormatAlignLeft";
 import Link from "@mui/material/Link";
 import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button";
@@ -15,7 +13,6 @@ import Select from "@mui/material/Select";
 import FormControl from "@mui/material/FormControl";
 import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
 import IconButton from "@mui/material/IconButton";
-import LinearProgress from "@mui/material/LinearProgress";
 import TaskService from "../services/task.service";
 import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
@@ -112,28 +109,28 @@ function Task(props) {
 
   const save = () => {
     let modifiedData = {};
-    if (content.description != description) {
+    if (content.description !== description) {
       modifiedData["description"] = description;
       handleOpenEditDesc();
     }
-    if (content.due_date != value) {
+    if (content.due_date !== value) {
       modifiedData["due_date"] = value;
     }
 
-    if (content.status != status) {
+    if (content.status !== status) {
       modifiedData["status"] = status;
     }
 
-    if (content.name != name) {
+    if (content.name !== name) {
       modifiedData["name"] = name;
       setOpenEditName(false);
     }
-    if (content.priority != priority) {
+    if (content.priority !== priority) {
       modifiedData["priority"] = priority;
     }
 
     if (content.list) {
-      if (content.list.id != list.id) {
+      if (content.list.id !== list.id) {
         modifiedData["list"] = list.id;
       }
     }

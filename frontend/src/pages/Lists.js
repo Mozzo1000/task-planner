@@ -19,8 +19,6 @@ import Collapse from "@mui/material/Collapse";
 import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
 import IconButton from "@mui/material/IconButton";
 import ListService from "../services/list.service";
-import Chip from "@mui/material/Chip";
-import { Link } from "react-router-dom";
 import TaskItem from "../components/TaskItem";
 
 function Lists() {

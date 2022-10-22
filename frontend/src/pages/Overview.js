@@ -1,17 +1,11 @@
 import React, { useEffect, useState } from "react";
 import Container from "@mui/material/Container";
 import Grid from "@mui/material/Grid";
-import Divider from "@mui/material/Divider";
 import Typography from "@mui/material/Typography";
 import List from "@mui/material/List";
-import ListItem from "@mui/material/ListItem";
 import Card from "@mui/material/Card";
-import ListItemIcon from "@mui/material/ListItemIcon";
-import Checkbox from "@mui/material/Checkbox";
-import { ListItemButton, ListItemText } from "@mui/material";
 import Greeting from "../components/Greeting";
 import AddTask from "../components/AddTask";
-import { Link } from "react-router-dom";
 import TaskService from "../services/task.service";
 import LinearProgress from "@mui/material/LinearProgress";
 import Snackbar from "@mui/material/Snackbar";
