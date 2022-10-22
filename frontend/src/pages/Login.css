@@ -1,11 +1,11 @@
 .login-form {
-    justify-content: center;
-    min-height: 90vh;
+  justify-content: center;
+  min-height: 90vh;
 }
 
 .login-background {
-    justify-content: center;
-    min-height: 30vh;
-    padding: 50px;
-    z-index: 1;
+  justify-content: center;
+  min-height: 30vh;
+  padding: 50px;
+  z-index: 1;
 }
