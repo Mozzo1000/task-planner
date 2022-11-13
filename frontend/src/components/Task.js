@@ -129,8 +129,10 @@ function Task(props) {
       modifiedData["priority"] = priority;
     }
 
-    if (content.list) {
-      if (content.list.id !== list.id) {
+    if (list) {
+      if (!content.list) {
+        modifiedData["list"] = list.id;
+      } else if (content.list.id !== list.id) {
         modifiedData["list"] = list.id;
       }
     }
