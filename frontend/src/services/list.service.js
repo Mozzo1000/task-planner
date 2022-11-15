@@ -35,11 +35,15 @@ const getTasksInList = (id, status) => {
   }
 };
 
+const remove = (id) => {
+  return axios.delete(API_URL + "lists/" + id, { headers: authHeader() });
+};
 const exportedObject = {
   getAll,
   get,
   add,
   getTasksInList,
+  remove,
 };
 
 export default exportedObject;
