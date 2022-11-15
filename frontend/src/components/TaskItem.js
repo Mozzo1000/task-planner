@@ -16,12 +16,25 @@ import Button from "@mui/material/Button";
 import Grid from "@mui/material/Grid";
 import OpenInNewIcon from "@mui/icons-material/OpenInNew";
 import Container from "@mui/material/Container";
+import Menu from "@mui/material/Menu";
+import MenuItem from "@mui/material/MenuItem";
+import SelectList from "./SelectList";
 
 function TaskItem(props) {
   const [checked, setChecked] = useState(false);
   const [openStatusMessage, setOpenStatusMessage] = useState(false);
   const [statusMessage, setStatusMessage] = useState("");
   const [openDrawer, setOpenDrawer] = useState(false);
+  const [contextMenu, setContextMenu] = React.useState(null);
+
+  const handleContextMenu = (e) => {
+    e.preventDefault();
+    setContextMenu(contextMenu == null ? { mouseX: e.clientX + 2, mouseY: e.clientY - 6 } : null);
+  };
+
+  const handleCloseContextMenu = () => {
+    setContextMenu(null);
+  };
 
   const handleCloseMessage = () => {
     setOpenStatusMessage(false);
@@ -32,6 +45,33 @@ function TaskItem(props) {
   };
   const handleCloseDrawer = () => {
     setOpenDrawer(false);
+  };
+
+  const changeList = (id, list_id) => {
+    const modifiedData = { list: list_id };
+    TaskService.editTask(id, modifiedData).then(
+      (response) => {
+        console.log(response.data);
+        if (props.onSuccess) {
+          props.onSuccess();
+        }
+        setStatusMessage(response.data.message);
+        setOpenStatusMessage(true);
+      },
+      (error) => {
+        const resMessage =
+          (error.response &&
+            error.response.data &&
+            error.response.data.message) ||
+          error.message ||
+          error.toString();
+        setStatusMessage(resMessage);
+        setOpenStatusMessage(true);
+        if (props.onError) {
+          props.onError();
+        }
+      }
+    );
   };
 
   const markTaskDone = (id) => {
@@ -65,7 +105,7 @@ function TaskItem(props) {
 
   return (
     <>
-      <ListItem dense>
+      <ListItem dense onContextMenu={handleContextMenu}>
         <ListItemIcon>
           <Checkbox
             checked={checked}
@@ -87,6 +127,12 @@ function TaskItem(props) {
           <Chip label={props.status} />
         </ListItemIcon>
       </ListItem>
+
+      <Menu open={contextMenu !== null} onClose={handleCloseContextMenu} anchorReference="anchorPosition" anchorPosition={contextMenu !== null ? { top: contextMenu.mouseY, left: contextMenu.mouseX } : undefined}>
+        <MenuItem disabled>Actions</MenuItem>
+        <SelectList setCallbackList={(e) => (changeList(props.id, e.id), handleCloseContextMenu())} />
+      </Menu>
+
       <Drawer anchor="right" open={openDrawer} onClose={handleCloseDrawer}>
         <Container>
           <br />
