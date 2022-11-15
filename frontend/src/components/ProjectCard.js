@@ -20,11 +20,45 @@ import DialogContent from "@mui/material/DialogContent";
 import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
 import FormControl from "@mui/material/FormControl";
+import IconButton from "@mui/material/IconButton";
+import Menu from '@mui/material/Menu';
+import MenuItem from '@mui/material/MenuItem';
+import ListItemIcon from '@mui/material/ListItemIcon';
+import DeleteIcon from '@mui/icons-material/Delete';
+import Snackbar from "@mui/material/Snackbar";
 
 function ProjectCard(props) {
   const [lists, setLists] = useState();
   const [openModal, setOpenModal] = useState(false);
   const [newListName, setNewListName] = useState();
+  const [anchorElMoreMenu, setAnchorElMoreMenu] = useState(null);
+  const openMoreMenu = Boolean(anchorElMoreMenu);
+  const [activeList, setActiveList] = useState(null);
+  const [openStatusMessage, setOpenStatusMessage] = useState(false);
+  const [statusMessage, setStatusMessage] = useState("");
+  const [openConfDeleteDialog, setOpenConfDeleteDialog] = useState(false);
+
+  const handleCloseMessage = () => {
+    setOpenStatusMessage(false);
+  };
+
+  const handleClickOpenConfDeleteDialog = () => {
+    setOpenConfDeleteDialog(true);
+  };
+
+  const handleCloseConfDeleteDialog = () => {
+    setOpenConfDeleteDialog(false);
+    handleCloseMoreMenu();
+  };
+
+  const handleClickMoreMenu = (event, id) => {
+    setAnchorElMoreMenu(event.currentTarget);
+    setActiveList(id);
+  };
+  const handleCloseMoreMenu = () => {
+    setAnchorElMoreMenu(null);
+    setActiveList(null);
+  };
 
   const handleClickOpenModal = () => {
     setOpenModal(true);
@@ -32,6 +66,28 @@ function ProjectCard(props) {
 
   const handleCloseModal = () => {
     setOpenModal(false);
+  };
+
+  const deleteList = (id) => {
+    handleCloseMoreMenu();
+    handleCloseConfDeleteDialog()
+    ListService.remove(id).then(
+      (response) => {
+        setLists(null);
+        setStatusMessage(response.data.message);
+        setOpenStatusMessage(true);
+      },
+      (error) => {
+        const resMessage =
+          (error.response &&
+            error.response.data &&
+            error.response.data.message) ||
+          error.message ||
+          error.toString();
+        setStatusMessage(resMessage);
+        setOpenStatusMessage(true);
+      }
+    );
   };
 
   const handleAddList = (e) => {
@@ -82,7 +138,7 @@ function ProjectCard(props) {
         console.log(resMessage);
       }
     );
-  }, []);
+  }, [lists]);
 
   return (
     <Grid container direction="row">
@@ -113,7 +169,9 @@ function ProjectCard(props) {
                     >
                       <ListItemText primary={list.name} />
                     </ListItemButton>
-                    <MoreVertIcon />
+                    <IconButton onClick={(e) => handleClickMoreMenu(e, list.id)}>
+                      <MoreVertIcon />
+                    </IconButton>
                   </ListItem>
                 ))
               ) : (
@@ -123,6 +181,28 @@ function ProjectCard(props) {
           </CardContent>
         </Card>
       </Grid>
+
+      <Menu anchorEl={anchorElMoreMenu} open={openMoreMenu} onClose={handleCloseMoreMenu}>
+        <MenuItem onClick={handleClickOpenConfDeleteDialog}>
+          <ListItemIcon><DeleteIcon /></ListItemIcon>
+          <ListItemText>Delete</ListItemText>
+        </MenuItem>
+      </Menu>
+
+      <Dialog
+        open={openConfDeleteDialog}
+        onClose={handleCloseConfDeleteDialog}>
+        <DialogContent>
+          <DialogContentText>
+            Are you sure you want to delete this list?
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleCloseConfDeleteDialog}>Cancel</Button>
+          <Button color="error" onClick={() => deleteList(activeList)} autoFocus>Delete</Button>
+        </DialogActions>
+      </Dialog>
+
       <Dialog open={openModal} onClose={handleCloseModal}>
         <DialogTitle>Add new list</DialogTitle>
         <FormControl>
@@ -152,6 +232,12 @@ function ProjectCard(props) {
           </form>
         </FormControl>
       </Dialog>
+      <Snackbar
+        open={openStatusMessage}
+        autoHideDuration={6000}
+        onClose={handleCloseMessage}
+        message={statusMessage}
+      />
     </Grid>
   );
 }
