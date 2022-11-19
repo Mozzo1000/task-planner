@@ -7,20 +7,16 @@ import "./Login.css";
 import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button";
 import AuthService from "../services/auth.service";
-import Snackbar from "@mui/material/Snackbar";
 import { useNavigate } from "react-router-dom";
+import useAlert from '../components/Alerts/useAlert';
 
 function Login(props) {
   document.title = "Login - Task Planner";
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
-  const [openStatusMessage, setOpenStatusMessage] = useState(false);
-  const [statusMessage, setStatusMessage] = useState("");
   let navigate = useNavigate();
+  const snackbar = useAlert()
 
-  const handleCloseMessage = () => {
-    setOpenStatusMessage(false);
-  };
 
   const handleLogin = (e) => {
     e.preventDefault();
@@ -35,8 +31,7 @@ function Login(props) {
             error.response.data.message) ||
           error.message ||
           error.toString();
-        setStatusMessage(resMessage);
-        setOpenStatusMessage(true);
+        snackbar.showError(resMessage)
       }
     );
   };
@@ -108,12 +103,6 @@ function Login(props) {
           </Grid>
         </Grid>
       </Grid>
-      <Snackbar
-        open={openStatusMessage}
-        autoHideDuration={6000}
-        onClose={handleCloseMessage}
-        message={statusMessage}
-      />
     </Container>
   );
 }

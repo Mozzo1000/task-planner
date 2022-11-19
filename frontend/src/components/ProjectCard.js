@@ -25,7 +25,7 @@ import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import DeleteIcon from '@mui/icons-material/Delete';
-import Snackbar from "@mui/material/Snackbar";
+import useAlert from './Alerts/useAlert';
 
 function ProjectCard(props) {
   const [lists, setLists] = useState();
@@ -34,13 +34,9 @@ function ProjectCard(props) {
   const [anchorElMoreMenu, setAnchorElMoreMenu] = useState(null);
   const openMoreMenu = Boolean(anchorElMoreMenu);
   const [activeList, setActiveList] = useState(null);
-  const [openStatusMessage, setOpenStatusMessage] = useState(false);
-  const [statusMessage, setStatusMessage] = useState("");
   const [openConfDeleteDialog, setOpenConfDeleteDialog] = useState(false);
 
-  const handleCloseMessage = () => {
-    setOpenStatusMessage(false);
-  };
+  const snackbar = useAlert();
 
   const handleClickOpenConfDeleteDialog = () => {
     setOpenConfDeleteDialog(true);
@@ -74,8 +70,7 @@ function ProjectCard(props) {
     ListService.remove(id).then(
       (response) => {
         setLists(null);
-        setStatusMessage(response.data.message);
-        setOpenStatusMessage(true);
+        snackbar.showSuccess(response.data.message);
       },
       (error) => {
         const resMessage =
@@ -84,8 +79,7 @@ function ProjectCard(props) {
             error.response.data.message) ||
           error.message ||
           error.toString();
-        setStatusMessage(resMessage);
-        setOpenStatusMessage(true);
+        snackbar.showError(resMessage);
       }
     );
   };
@@ -106,7 +100,7 @@ function ProjectCard(props) {
                 error.response.data.message) ||
               error.message ||
               error.toString();
-            console.log(resMessage);
+            snackbar.showError(resMessage);
           }
         );
       },
@@ -117,7 +111,7 @@ function ProjectCard(props) {
             error.response.data.message) ||
           error.message ||
           error.toString();
-        console.log(resMessage);
+        snackbar.showError(resMessage);
       }
     );
   };
@@ -135,7 +129,7 @@ function ProjectCard(props) {
             error.response.data.message) ||
           error.message ||
           error.toString();
-        console.log(resMessage);
+        snackbar.showError(resMessage);
       }
     );
   }, [lists]);
@@ -232,12 +226,6 @@ function ProjectCard(props) {
           </form>
         </FormControl>
       </Dialog>
-      <Snackbar
-        open={openStatusMessage}
-        autoHideDuration={6000}
-        onClose={handleCloseMessage}
-        message={statusMessage}
-      />
     </Grid>
   );
 }

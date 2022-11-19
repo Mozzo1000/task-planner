@@ -8,18 +8,13 @@ import Greeting from "../components/Greeting";
 import AddTask from "../components/AddTask";
 import TaskService from "../services/task.service";
 import LinearProgress from "@mui/material/LinearProgress";
-import Snackbar from "@mui/material/Snackbar";
 import TaskItem from "../components/TaskItem";
 import TodoCard from "../components/TodoCard";
+import useAlert from '../components/Alerts/useAlert';
 
 function Overview() {
   const [tasks, setTasks] = useState();
-  const [openStatusMessage, setOpenStatusMessage] = useState(false);
-  const [statusMessage, setStatusMessage] = useState("");
-
-  const handleCloseMessage = () => {
-    setOpenStatusMessage(false);
-  };
+  const snackbar = useAlert();
 
   const onTaskAdded = () => {
     TaskService.getAllTasks("?include_done=false").then(
@@ -34,7 +29,7 @@ function Overview() {
             error.response.data.message) ||
           error.message ||
           error.toString();
-        console.log(resMessage);
+        snackbar.showError(resMessage);
       }
     );
   };
@@ -52,7 +47,7 @@ function Overview() {
             error.response.data.message) ||
           error.message ||
           error.toString();
-        console.log(resMessage);
+        snackbar.showError(resMessage);
       }
     );
   }, []);
@@ -91,12 +86,6 @@ function Overview() {
           </Grid>
         </Grid>
       </Grid>
-      <Snackbar
-        open={openStatusMessage}
-        autoHideDuration={6000}
-        onClose={handleCloseMessage}
-        message={statusMessage}
-      />
     </Container>
   );
 }

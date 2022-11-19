@@ -17,7 +17,6 @@ import TaskService from "../services/task.service";
 import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
 import EditIcon from "@mui/icons-material/Edit";
-import Snackbar from "@mui/material/Snackbar";
 import { ICalendar } from "datebook";
 import DownloadIcon from "@mui/icons-material/Download";
 import ListItemIcon from "@mui/material/ListItemIcon";
@@ -30,6 +29,7 @@ import Stack from "@mui/material/Stack";
 import CelebrationIcon from "@mui/icons-material/Celebration";
 import PriorityHighIcon from "@mui/icons-material/PriorityHigh";
 import SelectList from "./SelectList";
+import useAlert from './Alerts/useAlert';
 
 function Task(props) {
   const [content, setContent] = useState({});
@@ -40,13 +40,12 @@ function Task(props) {
   const [description, setDescription] = useState();
   const [name, setName] = useState();
   const [openEditName, setOpenEditName] = useState(false);
-  const [openStatusMessage, setOpenStatusMessage] = useState(false);
-  const [statusMessage, setStatusMessage] = useState("");
   const [priority, setPriority] = useState("");
   const [list, setList] = useState("");
 
   const [menuAnchorEl, setMenuAnchorEl] = useState(null);
   const openMenu = Boolean(menuAnchorEl);
+  const snackbar = useAlert();
 
   const createICS = () => {
     const icalendar = new ICalendar({
@@ -141,8 +140,7 @@ function Task(props) {
       (response) => {
         console.log(response.data);
         setSaveButton(false);
-        setStatusMessage(response.data.message);
-        setOpenStatusMessage(true);
+        snackbar.showSuccess(response.data.message);
       },
       (error) => {
         const resMessage =
@@ -151,8 +149,7 @@ function Task(props) {
             error.response.data.message) ||
           error.message ||
           error.toString();
-        setStatusMessage(resMessage);
-        setOpenStatusMessage(true);
+        snackbar.showError(resMessage);
       }
     );
   };
@@ -177,15 +174,10 @@ function Task(props) {
           error.message ||
           error.toString();
         console.log(resMessage);
-        setStatusMessage(resMessage);
-        setOpenStatusMessage(true);
+        snackbar.showError(resMessage);
       }
     );
   }, []);
-
-  const handleCloseMessage = () => {
-    setOpenStatusMessage(false);
-  };
 
   return (
     <Container>
@@ -382,12 +374,6 @@ function Task(props) {
           <Button onClick={closeAndClearEditDesc}>Cancel</Button>
         </>
       )}
-      <Snackbar
-        open={openStatusMessage}
-        autoHideDuration={6000}
-        onClose={handleCloseMessage}
-        message={statusMessage}
-      />
     </Container>
   );
 }

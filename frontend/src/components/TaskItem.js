@@ -5,7 +5,6 @@ import ListItemButton from "@mui/material/ListItemButton";
 import ListItemText from "@mui/material/ListItemText";
 import Checkbox from "@mui/material/Checkbox";
 import Chip from "@mui/material/Chip";
-import Snackbar from "@mui/material/Snackbar";
 import TaskService from "../services/task.service";
 import { Link } from "react-router-dom";
 import Drawer from "@mui/material/Drawer";
@@ -19,13 +18,13 @@ import Container from "@mui/material/Container";
 import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
 import SelectList from "./SelectList";
+import useAlert from './Alerts/useAlert';
 
 function TaskItem(props) {
   const [checked, setChecked] = useState(false);
-  const [openStatusMessage, setOpenStatusMessage] = useState(false);
-  const [statusMessage, setStatusMessage] = useState("");
   const [openDrawer, setOpenDrawer] = useState(false);
   const [contextMenu, setContextMenu] = React.useState(null);
+  const snackbar = useAlert();
 
   const handleContextMenu = (e) => {
     e.preventDefault();
@@ -34,10 +33,6 @@ function TaskItem(props) {
 
   const handleCloseContextMenu = () => {
     setContextMenu(null);
-  };
-
-  const handleCloseMessage = () => {
-    setOpenStatusMessage(false);
   };
 
   const handleOpenDrawer = () => {
@@ -55,8 +50,7 @@ function TaskItem(props) {
         if (props.onSuccess) {
           props.onSuccess();
         }
-        setStatusMessage(response.data.message);
-        setOpenStatusMessage(true);
+        snackbar.showSuccess(response.data.message);
       },
       (error) => {
         const resMessage =
@@ -65,8 +59,7 @@ function TaskItem(props) {
             error.response.data.message) ||
           error.message ||
           error.toString();
-        setStatusMessage(resMessage);
-        setOpenStatusMessage(true);
+        snackbar.showError(resMessage);
         if (props.onError) {
           props.onError();
         }
@@ -83,8 +76,7 @@ function TaskItem(props) {
         if (props.onSuccess) {
           props.onSuccess();
         }
-        setStatusMessage(response.data.message);
-        setOpenStatusMessage(true);
+        snackbar.showSuccess(response.data.message);
         setChecked(false);
       },
       (error) => {
@@ -94,8 +86,7 @@ function TaskItem(props) {
             error.response.data.message) ||
           error.message ||
           error.toString();
-        setStatusMessage(resMessage);
-        setOpenStatusMessage(true);
+        snackbar.showError(resMessage);
         if (props.onError) {
           props.onError();
         }
@@ -166,12 +157,6 @@ function TaskItem(props) {
           </Grid>
         </Container>
       </Drawer>
-      <Snackbar
-        open={openStatusMessage}
-        autoHideDuration={6000}
-        onClose={handleCloseMessage}
-        message={statusMessage}
-      />
     </>
   );
 }
