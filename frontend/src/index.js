@@ -7,6 +7,7 @@ import { LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import { SnackbarProvider } from 'material-ui-snackbar-provider'
+import Alert from './components/Alerts/Alert';
 
 const container = document.getElementById("root");
 const root = createRoot(container);
@@ -27,7 +28,7 @@ root.render(
   <React.StrictMode>
     <LocalizationProvider dateAdapter={AdapterDateFns}>
       <ThemeProvider theme={theme}>
-        <SnackbarProvider SnackbarProps={{ autoHideDuration: 4000 }}>
+        <SnackbarProvider SnackbarComponent={Alert}>
           <App />
         </SnackbarProvider>
       </ThemeProvider>
